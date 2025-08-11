@@ -109,7 +109,7 @@ const Tasks = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-3 gap-4 text-center">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
           {[1, 2, 3].map((taskNum) => {
             const task = tasks.find(t => t.taskNumber === taskNum);
             const isCompleted = task?.completed;

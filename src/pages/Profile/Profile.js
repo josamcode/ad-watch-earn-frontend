@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { Card, Button, Input } from '../../components/UI/LoadingSpinner';
 import {
@@ -12,8 +13,10 @@ import {
   Shield,
   Edit3,
   Save,
-  X
+  X,
+  RefreshCw
 } from 'lucide-react';
+import axios from 'axios';
 import toast from 'react-hot-toast';
 
 const Profile = () => {
@@ -34,13 +37,20 @@ const Profile = () => {
   const handleSave = async () => {
     try {
       setLoading(true);
-      // In a real app, you would make an API call to update the user
-      // For now, we'll just update the local state
-      updateUser(formData);
-      setIsEditing(false);
-      toast.success('Profile updated successfully!');
+
+      const response = await axios.put('/users/profile', formData);
+
+      if (response.data.success) {
+        updateUser(response.data.user);
+        setIsEditing(false);
+        toast.success('Profile updated successfully!');
+      } else {
+        toast.error(response.data.message || 'Failed to update profile');
+      }
     } catch (error) {
-      toast.error('Failed to update profile');
+      console.error('Profile update error:', error);
+      const message = error.response?.data?.message || 'Failed to update profile';
+      toast.error(message);
     } finally {
       setLoading(false);
     }
@@ -70,8 +80,8 @@ const Profile = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="mb-8">
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="text-center mb-8">
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
           My Profile
         </h1>
@@ -268,20 +278,29 @@ const Profile = () => {
               Quick Actions
             </h3>
             <div className="space-y-3">
-              <button className="w-full flex items-center space-x-3 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors">
+              <Link
+                to="/tasks"
+                className="w-full flex items-center space-x-3 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors"
+              >
                 <Video className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                 <span className="text-blue-700 dark:text-blue-300 font-medium">Watch Videos</span>
-              </button>
+              </Link>
 
-              <button className="w-full flex items-center space-x-3 p-3 bg-green-50 dark:bg-green-900/20 rounded-lg hover:bg-green-100 dark:hover:bg-green-900/30 transition-colors">
+              <Link
+                to="/withdrawal"
+                className="w-full flex items-center space-x-3 p-3 bg-green-50 dark:bg-green-900/20 rounded-lg hover:bg-green-100 dark:hover:bg-green-900/30 transition-colors"
+              >
                 <DollarSign className="w-5 h-5 text-green-600 dark:text-green-400" />
                 <span className="text-green-700 dark:text-green-300 font-medium">Withdraw Money</span>
-              </button>
+              </Link>
 
-              <button className="w-full flex items-center space-x-3 p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg hover:bg-purple-100 dark:hover:bg-purple-900/30 transition-colors">
+              <Link
+                to="/withdrawal-history"
+                className="w-full flex items-center space-x-3 p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg hover:bg-purple-100 dark:hover:bg-purple-900/30 transition-colors"
+              >
                 <Calendar className="w-5 h-5 text-purple-600 dark:text-purple-400" />
                 <span className="text-purple-700 dark:text-purple-300 font-medium">View History</span>
-              </button>
+              </Link>
             </div>
           </Card>
 
@@ -354,6 +373,7 @@ export const Notifications = () => {
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('all');
+  const [markingRead, setMarkingRead] = useState(false);
 
   React.useEffect(() => {
     fetchNotifications();
@@ -362,40 +382,19 @@ export const Notifications = () => {
   const fetchNotifications = async () => {
     try {
       setLoading(true);
-      // In a real app, you would fetch from API
-      // For now, we'll use mock data
-      const mockNotifications = [
-        {
-          _id: '1',
-          title: 'Withdrawal Approved',
-          message: 'Your withdrawal request for 50,000 IQD has been approved.',
-          type: 'withdrawal',
-          read: false,
-          createdAt: new Date().toISOString()
-        },
-        {
-          _id: '2',
-          title: 'Task Completed',
-          message: 'Congratulations! You have completed Task 1 and earned 15,000 IQD.',
-          type: 'task',
-          read: true,
-          createdAt: new Date(Date.now() - 86400000).toISOString() // 1 day ago
-        },
-        {
-          _id: '3',
-          title: 'New Task Available',
-          message: 'Task 2 is now unlocked! Start watching videos to earn more money.',
-          type: 'task',
-          read: true,
-          createdAt: new Date(Date.now() - 172800000).toISOString() // 2 days ago
-        }
-      ];
+      const params = new URLSearchParams({
+        page: 1,
+        limit: 50,
+        type: filter
+      });
 
-      const filtered = filter === 'all'
-        ? mockNotifications
-        : mockNotifications.filter(n => n.type === filter);
+      const response = await axios.get(`/users/notifications?${params}`);
 
-      setNotifications(filtered);
+      if (response.data.success) {
+        setNotifications(response.data.notifications);
+      } else {
+        toast.error('Failed to load notifications');
+      }
     } catch (error) {
       console.error('Fetch notifications error:', error);
       toast.error('Failed to load notifications');
@@ -406,27 +405,38 @@ export const Notifications = () => {
 
   const markAsRead = async (notificationId) => {
     try {
-      // In a real app, you would make an API call
-      setNotifications(prev =>
-        prev.map(n =>
-          n._id === notificationId ? { ...n, read: true } : n
-        )
-      );
-      toast.success('Marked as read');
+      const response = await axios.put(`/users/notifications/${notificationId}/read`);
+
+      if (response.data.success) {
+        setNotifications(prev =>
+          prev.map(n =>
+            n._id === notificationId ? { ...n, read: true } : n
+          )
+        );
+        toast.success('Marked as read');
+      }
     } catch (error) {
+      console.error('Mark as read error:', error);
       toast.error('Failed to mark as read');
     }
   };
 
   const markAllAsRead = async () => {
     try {
-      // In a real app, you would make an API call
-      setNotifications(prev =>
-        prev.map(n => ({ ...n, read: true }))
-      );
-      toast.success('All notifications marked as read');
+      setMarkingRead(true);
+      const response = await axios.put('/users/notifications/mark-all-read');
+
+      if (response.data.success) {
+        setNotifications(prev =>
+          prev.map(n => ({ ...n, read: true }))
+        );
+        toast.success('All notifications marked as read');
+      }
     } catch (error) {
+      console.error('Mark all as read error:', error);
       toast.error('Failed to mark all as read');
+    } finally {
+      setMarkingRead(false);
     }
   };
 
@@ -438,6 +448,8 @@ export const Notifications = () => {
         return <Video className="w-5 h-5 text-blue-600 dark:text-blue-400" />;
       case 'earning':
         return <DollarSign className="w-5 h-5 text-yellow-600 dark:text-yellow-400" />;
+      case 'general':
+        return <Settings className="w-5 h-5 text-gray-600 dark:text-gray-400" />;
       default:
         return <Settings className="w-5 h-5 text-gray-600 dark:text-gray-400" />;
     }
@@ -451,6 +463,27 @@ export const Notifications = () => {
       hour: '2-digit',
       minute: '2-digit'
     });
+  };
+
+  const getTimeAgo = (dateString) => {
+    const now = new Date();
+    const notificationDate = new Date(dateString);
+    const diffInSeconds = Math.floor((now - notificationDate) / 1000);
+
+    if (diffInSeconds < 60) {
+      return 'Just now';
+    } else if (diffInSeconds < 3600) {
+      const minutes = Math.floor(diffInSeconds / 60);
+      return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
+    } else if (diffInSeconds < 86400) {
+      const hours = Math.floor(diffInSeconds / 3600);
+      return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+    } else if (diffInSeconds < 604800) {
+      const days = Math.floor(diffInSeconds / 86400);
+      return `${days} day${days > 1 ? 's' : ''} ago`;
+    } else {
+      return formatDate(dateString);
+    }
   };
 
   return (
@@ -468,7 +501,8 @@ export const Notifications = () => {
         <Button
           variant="outline"
           onClick={markAllAsRead}
-          disabled={notifications.every(n => n.read)}
+          disabled={notifications.every(n => n.read) || markingRead}
+          loading={markingRead}
         >
           Mark All Read
         </Button>
@@ -476,19 +510,22 @@ export const Notifications = () => {
 
       {/* Filters */}
       <Card className="p-4 mb-6">
-        <div className="flex items-center space-x-4">
-          <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-4">
+          <span className="mb-2 sm:mb-0 text-sm font-medium text-gray-700 dark:text-gray-300 whitespace-nowrap">
             Filter:
           </span>
-          <div className="flex space-x-2">
-            {['all', 'withdrawal', 'task', 'earning'].map((type) => (
+          <div className="grid grid-cols-2 gap-2 sm:flex sm:space-x-2 sm:grid-cols-auto w-full max-w-md">
+            {['all', 'withdrawal', 'task', 'earning', 'general'].map((type) => (
               <button
                 key={type}
                 onClick={() => setFilter(type)}
-                className={`px-3 py-1 rounded-full text-sm font-medium capitalize ${filter === type
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
-                  }`}
+                className={`w-full sm:w-auto px-4 py-2 rounded-full text-sm font-medium capitalize transition-colors duration-200
+            ${filter === type
+                    ? 'bg-blue-600 text-white shadow-md'
+                    : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                  }
+          `}
+                aria-pressed={filter === type}
               >
                 {type}
               </button>
@@ -496,6 +533,20 @@ export const Notifications = () => {
           </div>
         </div>
       </Card>
+
+
+      {/* Refresh Button */}
+      <div className="flex justify-end mb-4">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={fetchNotifications}
+          disabled={loading}
+        >
+          <RefreshCw className={`w-4 h-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
+          Refresh
+        </Button>
+      </div>
 
       {/* Notifications List */}
       <div className="space-y-4">
@@ -518,7 +569,7 @@ export const Notifications = () => {
           notifications.map((notification) => (
             <Card
               key={notification._id}
-              className={`p-6 cursor-pointer transition-all ${notification.read
+              className={`p-6 cursor-pointer transition-all hover:shadow-md ${notification.read
                 ? 'bg-white dark:bg-gray-800'
                 : 'bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800'
                 }`}
@@ -540,9 +591,14 @@ export const Notifications = () => {
                       }`}>
                       {notification.title}
                     </h3>
-                    {!notification.read && (
-                      <span className="w-2 h-2 bg-blue-600 rounded-full"></span>
-                    )}
+                    <div className="flex items-center space-x-2">
+                      <span className="text-xs text-gray-500 dark:text-gray-400">
+                        {getTimeAgo(notification.createdAt)}
+                      </span>
+                      {!notification.read && (
+                        <span className="w-2 h-2 bg-blue-600 rounded-full"></span>
+                      )}
+                    </div>
                   </div>
 
                   <p className={`text-sm ${notification.read
@@ -552,9 +608,19 @@ export const Notifications = () => {
                     {notification.message}
                   </p>
 
-                  <p className="text-xs text-gray-500 dark:text-gray-500">
-                    {formatDate(notification.createdAt)}
-                  </p>
+                  <div className="flex items-center justify-between">
+                    <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium capitalize ${notification.type === 'withdrawal' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300' :
+                      notification.type === 'task' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300' :
+                        notification.type === 'earning' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300' :
+                          'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'
+                      }`}>
+                      {notification.type}
+                    </span>
+
+                    <p className="text-xs text-gray-500 dark:text-gray-500">
+                      {formatDate(notification.createdAt)}
+                    </p>
+                  </div>
                 </div>
               </div>
             </Card>
@@ -565,9 +631,16 @@ export const Notifications = () => {
             <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
               No Notifications
             </h3>
-            <p className="text-gray-600 dark:text-gray-400">
+            <p className="text-gray-600 dark:text-gray-400 mb-4">
               You're all caught up! New notifications will appear here.
             </p>
+            <Button
+              variant="outline"
+              onClick={fetchNotifications}
+              disabled={loading}
+            >
+              Check Again
+            </Button>
           </Card>
         )}
       </div>

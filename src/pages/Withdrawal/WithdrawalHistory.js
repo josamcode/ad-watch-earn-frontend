@@ -119,7 +119,7 @@ const WithdrawalHistory = () => {
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Header */}
-      <div className="flex items-center justify-between mb-8">
+      <div className="block sm:flex items-center justify-between mb-8">
         <div className="flex items-center space-x-4">
           <Link
             to="/withdrawal"
@@ -137,7 +137,7 @@ const WithdrawalHistory = () => {
           </div>
         </div>
 
-        <div className="flex items-center space-x-3">
+        <div className="flex items-center mt-2 sm:mt-0 sm:justify-normal justify-center space-x-3">
           <Button
             variant="outline"
             onClick={fetchWithdrawals}
@@ -350,8 +350,8 @@ const WithdrawalHistory = () => {
                   key={page}
                   onClick={() => setCurrentPage(page)}
                   className={`px-3 py-1 rounded-md text-sm font-medium ${page === currentPage
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
                     }`}
                 >
                   {page}
