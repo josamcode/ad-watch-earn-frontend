@@ -1,0 +1,578 @@
+import React, { useState } from 'react';
+import { useAuth } from '../../contexts/AuthContext';
+import { Card, Button, Input } from '../../components/UI/LoadingSpinner';
+import {
+  User,
+  Mail,
+  Phone,
+  Calendar,
+  DollarSign,
+  Video,
+  Settings,
+  Shield,
+  Edit3,
+  Save,
+  X
+} from 'lucide-react';
+import toast from 'react-hot-toast';
+
+const Profile = () => {
+  const { user, updateUser } = useAuth();
+  const [isEditing, setIsEditing] = useState(false);
+  const [formData, setFormData] = useState({
+    name: user?.name || '',
+    email: user?.email || '',
+    phoneNumber: user?.phoneNumber || ''
+  });
+  const [loading, setLoading] = useState(false);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSave = async () => {
+    try {
+      setLoading(true);
+      // In a real app, you would make an API call to update the user
+      // For now, we'll just update the local state
+      updateUser(formData);
+      setIsEditing(false);
+      toast.success('Profile updated successfully!');
+    } catch (error) {
+      toast.error('Failed to update profile');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleCancel = () => {
+    setFormData({
+      name: user?.name || '',
+      email: user?.email || '',
+      phoneNumber: user?.phoneNumber || ''
+    });
+    setIsEditing(false);
+  };
+
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  };
+
+  const getTaskProgressPercentage = () => {
+    if (!user?.taskProgress) return 0;
+    const completedTasks = Object.values(user.taskProgress).filter(task => task.completed).length;
+    return (completedTasks / 3) * 100; // 3 total tasks
+  };
+
+  return (
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+          My Profile
+        </h1>
+        <p className="text-gray-600 dark:text-gray-400">
+          Manage your account information and view your statistics
+        </p>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* Profile Information */}
+        <div className="lg:col-span-2">
+          <Card className="p-6">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+                Personal Information
+              </h2>
+              {!isEditing ? (
+                <Button
+                  variant="outline"
+                  onClick={() => setIsEditing(true)}
+                >
+                  <Edit3 className="w-4 h-4 mr-2" />
+                  Edit Profile
+                </Button>
+              ) : (
+                <div className="flex space-x-2">
+                  <Button
+                    variant="outline"
+                    onClick={handleCancel}
+                    disabled={loading}
+                  >
+                    <X className="w-4 h-4 mr-2" />
+                    Cancel
+                  </Button>
+                  <Button
+                    onClick={handleSave}
+                    loading={loading}
+                  >
+                    <Save className="w-4 h-4 mr-2" />
+                    Save
+                  </Button>
+                </div>
+              )}
+            </div>
+
+            <div className="space-y-6">
+              {/* Profile Picture Placeholder */}
+              <div className="flex items-center space-x-4">
+                <div className="w-20 h-20 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+                  <User className="w-10 h-10 text-white" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                    {user?.name}
+                  </h3>
+                  <p className="text-gray-600 dark:text-gray-400">
+                    Member since {user?.createdAt ? formatDate(user.createdAt) : 'Unknown'}
+                  </p>
+                </div>
+              </div>
+
+              {/* Form Fields */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <Input
+                    label="Full Name"
+                    name="name"
+                    value={isEditing ? formData.name : user?.name || ''}
+                    onChange={handleChange}
+                    disabled={!isEditing}
+                    required
+                  />
+                </div>
+
+                <div>
+                  <Input
+                    label="Username"
+                    value={user?.username || ''}
+                    disabled
+                    className="bg-gray-50 dark:bg-gray-700"
+                  />
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                    Username cannot be changed
+                  </p>
+                </div>
+
+                <div>
+                  <Input
+                    label="Email Address"
+                    name="email"
+                    type="email"
+                    value={isEditing ? formData.email : user?.email || ''}
+                    onChange={handleChange}
+                    disabled={!isEditing}
+                    required
+                  />
+                </div>
+
+                <div>
+                  <Input
+                    label="Phone Number"
+                    name="phoneNumber"
+                    value={isEditing ? formData.phoneNumber : user?.phoneNumber || ''}
+                    onChange={handleChange}
+                    disabled={!isEditing}
+                    required
+                  />
+                </div>
+
+                <div>
+                  <Input
+                    label="Account Type"
+                    value={user?.userType === 'admin' ? 'Administrator' : 'Regular User'}
+                    disabled
+                    className="bg-gray-50 dark:bg-gray-700"
+                  />
+                </div>
+
+                <div>
+                  <Input
+                    label="Last Login"
+                    value={user?.lastLogin ? formatDate(user.lastLogin) : 'Unknown'}
+                    disabled
+                    className="bg-gray-50 dark:bg-gray-700"
+                  />
+                </div>
+              </div>
+            </div>
+          </Card>
+
+          {/* Account Statistics */}
+          <Card className="p-6 mt-6">
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">
+              Account Statistics
+            </h2>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg">
+                <div className="flex items-center space-x-3">
+                  <DollarSign className="w-8 h-8 text-green-600 dark:text-green-400" />
+                  <div>
+                    <p className="text-sm text-green-700 dark:text-green-300">Total Earned</p>
+                    <p className="text-2xl font-bold text-green-800 dark:text-green-200">
+                      {user?.totalEarned?.toLocaleString() || 0} IQD
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
+                <div className="flex items-center space-x-3">
+                  <DollarSign className="w-8 h-8 text-blue-600 dark:text-blue-400" />
+                  <div>
+                    <p className="text-sm text-blue-700 dark:text-blue-300">Current Balance</p>
+                    <p className="text-2xl font-bold text-blue-800 dark:text-blue-200">
+                      {user?.balance?.toLocaleString() || 0} IQD
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg">
+                <div className="flex items-center space-x-3">
+                  <Video className="w-8 h-8 text-purple-600 dark:text-purple-400" />
+                  <div>
+                    <p className="text-sm text-purple-700 dark:text-purple-300">Videos Watched</p>
+                    <p className="text-2xl font-bold text-purple-800 dark:text-purple-200">
+                      {user?.videoViews?.length || 0}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-orange-50 dark:bg-orange-900/20 p-4 rounded-lg">
+                <div className="flex items-center space-x-3">
+                  <Settings className="w-8 h-8 text-orange-600 dark:text-orange-400" />
+                  <div>
+                    <p className="text-sm text-orange-700 dark:text-orange-300">Task Progress</p>
+                    <p className="text-2xl font-bold text-orange-800 dark:text-orange-200">
+                      {getTaskProgressPercentage().toFixed(0)}%
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </Card>
+        </div>
+
+        {/* Sidebar */}
+        <div className="space-y-6">
+          {/* Quick Actions */}
+          <Card className="p-6">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+              Quick Actions
+            </h3>
+            <div className="space-y-3">
+              <button className="w-full flex items-center space-x-3 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors">
+                <Video className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                <span className="text-blue-700 dark:text-blue-300 font-medium">Watch Videos</span>
+              </button>
+
+              <button className="w-full flex items-center space-x-3 p-3 bg-green-50 dark:bg-green-900/20 rounded-lg hover:bg-green-100 dark:hover:bg-green-900/30 transition-colors">
+                <DollarSign className="w-5 h-5 text-green-600 dark:text-green-400" />
+                <span className="text-green-700 dark:text-green-300 font-medium">Withdraw Money</span>
+              </button>
+
+              <button className="w-full flex items-center space-x-3 p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg hover:bg-purple-100 dark:hover:bg-purple-900/30 transition-colors">
+                <Calendar className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+                <span className="text-purple-700 dark:text-purple-300 font-medium">View History</span>
+              </button>
+            </div>
+          </Card>
+
+          {/* Account Security */}
+          <Card className="p-6">
+            <div className="flex items-center space-x-3 mb-4">
+              <Shield className="w-6 h-6 text-green-600 dark:text-green-400" />
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                Account Security
+              </h3>
+            </div>
+            <div className="space-y-3">
+              <div className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
+                <span className="text-sm text-green-700 dark:text-green-300">
+                  Account Status
+                </span>
+                <span className="text-sm font-medium text-green-800 dark:text-green-200">
+                  {user?.isActive ? 'Active' : 'Inactive'}
+                </span>
+              </div>
+
+              <div className="flex items-center justify-between p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                <span className="text-sm text-blue-700 dark:text-blue-300">
+                  Email Verified
+                </span>
+                <span className="text-sm font-medium text-blue-800 dark:text-blue-200">
+                  Yes
+                </span>
+              </div>
+            </div>
+          </Card>
+
+          {/* Task Progress */}
+          <Card className="p-6">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+              Task Progress
+            </h3>
+            <div className="space-y-3">
+              {[1, 2, 3].map((taskNum) => {
+                const task = user?.taskProgress?.[`task${taskNum}`];
+                const isCompleted = task?.completed;
+                const isUnlocked = task?.unlockedAt !== null;
+
+                return (
+                  <div key={taskNum} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                    <span className="text-sm font-medium text-gray-900 dark:text-white">
+                      Task {taskNum}
+                    </span>
+                    <span className={`text-xs px-2 py-1 rounded-full ${isCompleted
+                      ? 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200'
+                      : isUnlocked
+                        ? 'bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200'
+                        : 'bg-gray-100 dark:bg-gray-600 text-gray-800 dark:text-gray-200'
+                      }`}>
+                      {isCompleted ? 'Completed' : isUnlocked ? 'Available' : 'Locked'}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          </Card>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Notifications Page Component
+export const Notifications = () => {
+  const [notifications, setNotifications] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [filter, setFilter] = useState('all');
+
+  React.useEffect(() => {
+    fetchNotifications();
+  }, [filter]);
+
+  const fetchNotifications = async () => {
+    try {
+      setLoading(true);
+      // In a real app, you would fetch from API
+      // For now, we'll use mock data
+      const mockNotifications = [
+        {
+          _id: '1',
+          title: 'Withdrawal Approved',
+          message: 'Your withdrawal request for 50,000 IQD has been approved.',
+          type: 'withdrawal',
+          read: false,
+          createdAt: new Date().toISOString()
+        },
+        {
+          _id: '2',
+          title: 'Task Completed',
+          message: 'Congratulations! You have completed Task 1 and earned 15,000 IQD.',
+          type: 'task',
+          read: true,
+          createdAt: new Date(Date.now() - 86400000).toISOString() // 1 day ago
+        },
+        {
+          _id: '3',
+          title: 'New Task Available',
+          message: 'Task 2 is now unlocked! Start watching videos to earn more money.',
+          type: 'task',
+          read: true,
+          createdAt: new Date(Date.now() - 172800000).toISOString() // 2 days ago
+        }
+      ];
+
+      const filtered = filter === 'all'
+        ? mockNotifications
+        : mockNotifications.filter(n => n.type === filter);
+
+      setNotifications(filtered);
+    } catch (error) {
+      console.error('Fetch notifications error:', error);
+      toast.error('Failed to load notifications');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const markAsRead = async (notificationId) => {
+    try {
+      // In a real app, you would make an API call
+      setNotifications(prev =>
+        prev.map(n =>
+          n._id === notificationId ? { ...n, read: true } : n
+        )
+      );
+      toast.success('Marked as read');
+    } catch (error) {
+      toast.error('Failed to mark as read');
+    }
+  };
+
+  const markAllAsRead = async () => {
+    try {
+      // In a real app, you would make an API call
+      setNotifications(prev =>
+        prev.map(n => ({ ...n, read: true }))
+      );
+      toast.success('All notifications marked as read');
+    } catch (error) {
+      toast.error('Failed to mark all as read');
+    }
+  };
+
+  const getNotificationIcon = (type) => {
+    switch (type) {
+      case 'withdrawal':
+        return <DollarSign className="w-5 h-5 text-green-600 dark:text-green-400" />;
+      case 'task':
+        return <Video className="w-5 h-5 text-blue-600 dark:text-blue-400" />;
+      case 'earning':
+        return <DollarSign className="w-5 h-5 text-yellow-600 dark:text-yellow-400" />;
+      default:
+        return <Settings className="w-5 h-5 text-gray-600 dark:text-gray-400" />;
+    }
+  };
+
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  };
+
+  return (
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="flex items-center justify-between mb-8">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+            Notifications
+          </h1>
+          <p className="text-gray-600 dark:text-gray-400">
+            Stay updated with your account activity
+          </p>
+        </div>
+
+        <Button
+          variant="outline"
+          onClick={markAllAsRead}
+          disabled={notifications.every(n => n.read)}
+        >
+          Mark All Read
+        </Button>
+      </div>
+
+      {/* Filters */}
+      <Card className="p-4 mb-6">
+        <div className="flex items-center space-x-4">
+          <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+            Filter:
+          </span>
+          <div className="flex space-x-2">
+            {['all', 'withdrawal', 'task', 'earning'].map((type) => (
+              <button
+                key={type}
+                onClick={() => setFilter(type)}
+                className={`px-3 py-1 rounded-full text-sm font-medium capitalize ${filter === type
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                  }`}
+              >
+                {type}
+              </button>
+            ))}
+          </div>
+        </div>
+      </Card>
+
+      {/* Notifications List */}
+      <div className="space-y-4">
+        {loading ? (
+          <div className="space-y-4">
+            {[1, 2, 3].map((i) => (
+              <Card key={i} className="p-6 animate-pulse">
+                <div className="flex space-x-4">
+                  <div className="w-10 h-10 bg-gray-200 dark:bg-gray-700 rounded-full"></div>
+                  <div className="flex-1 space-y-2">
+                    <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/4"></div>
+                    <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-3/4"></div>
+                    <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/2"></div>
+                  </div>
+                </div>
+              </Card>
+            ))}
+          </div>
+        ) : notifications.length > 0 ? (
+          notifications.map((notification) => (
+            <Card
+              key={notification._id}
+              className={`p-6 cursor-pointer transition-all ${notification.read
+                ? 'bg-white dark:bg-gray-800'
+                : 'bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800'
+                }`}
+              onClick={() => !notification.read && markAsRead(notification._id)}
+            >
+              <div className="flex items-start space-x-4">
+                <div className={`p-2 rounded-full ${notification.read
+                  ? 'bg-gray-100 dark:bg-gray-700'
+                  : 'bg-blue-100 dark:bg-blue-900'
+                  }`}>
+                  {getNotificationIcon(notification.type)}
+                </div>
+
+                <div className="flex-1">
+                  <div className="flex items-center justify-between mb-1">
+                    <h3 className={`font-semibold ${notification.read
+                      ? 'text-gray-900 dark:text-white'
+                      : 'text-blue-900 dark:text-blue-100'
+                      }`}>
+                      {notification.title}
+                    </h3>
+                    {!notification.read && (
+                      <span className="w-2 h-2 bg-blue-600 rounded-full"></span>
+                    )}
+                  </div>
+
+                  <p className={`text-sm ${notification.read
+                    ? 'text-gray-600 dark:text-gray-400'
+                    : 'text-blue-700 dark:text-blue-300'
+                    } mb-2`}>
+                    {notification.message}
+                  </p>
+
+                  <p className="text-xs text-gray-500 dark:text-gray-500">
+                    {formatDate(notification.createdAt)}
+                  </p>
+                </div>
+              </div>
+            </Card>
+          ))
+        ) : (
+          <Card className="p-12 text-center">
+            <Settings className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+              No Notifications
+            </h3>
+            <p className="text-gray-600 dark:text-gray-400">
+              You're all caught up! New notifications will appear here.
+            </p>
+          </Card>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default Profile;
