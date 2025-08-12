@@ -9,6 +9,8 @@
 
   body {
     @apply bg-background text-foreground;
+    direction: rtl;
+    text-align: right;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
 

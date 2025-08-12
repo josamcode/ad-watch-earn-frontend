@@ -40,7 +40,7 @@ const WithdrawalHistory = () => {
       }
     } catch (error) {
       console.error('Fetch withdrawals error:', error);
-      toast.error('Failed to load withdrawal history');
+      toast.error('فشل في تحميل سجل السحوبات');
     } finally {
       setLoading(false);
     }
@@ -60,11 +60,11 @@ const WithdrawalHistory = () => {
   const getStatusBadge = (status) => {
     switch (status) {
       case 'pending':
-        return <Badge variant="warning">⏳ Pending</Badge>;
+        return <Badge variant="warning">⏳ معلق</Badge>;
       case 'approved':
-        return <Badge variant="success">✅ Approved</Badge>;
+        return <Badge variant="success">✅ معتمد</Badge>;
       case 'rejected':
-        return <Badge variant="danger">❌ Rejected</Badge>;
+        return <Badge variant="danger">❌ مرفوض</Badge>;
       default:
         return <Badge variant="default">{status}</Badge>;
     }
@@ -84,17 +84,17 @@ const WithdrawalHistory = () => {
   };
 
   const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
+    return new Date(dateString).toLocaleDateString('ar', {
       year: 'numeric',
       month: 'short',
       day: 'numeric',
       hour: '2-digit',
       minute: '2-digit'
-    });
+    }).replace(/\u200F/g, ''); // Remove RTL mark if present
   };
 
   const cancelWithdrawal = async (withdrawalId) => {
-    if (!window.confirm('Are you sure you want to cancel this withdrawal request?')) {
+    if (!window.confirm('هل أنت متأكد أنك تريد إلغاء طلب السحب هذا؟')) {
       return;
     }
 
@@ -102,18 +102,18 @@ const WithdrawalHistory = () => {
       const response = await axios.post(`/withdrawals/${withdrawalId}/cancel`);
 
       if (response.data.success) {
-        toast.success('Withdrawal cancelled successfully');
+        toast.success('تم إلغاء السحب بنجاح');
         fetchWithdrawals();
         fetchStats();
       }
     } catch (error) {
       console.error('Cancel withdrawal error:', error);
-      toast.error(error.response?.data?.message || 'Failed to cancel withdrawal');
+      toast.error(error.response?.data?.message || 'فشل في إلغاء السحب');
     }
   };
 
   if (loading && withdrawals.length === 0) {
-    return <LoadingSpinner text="Loading withdrawal history..." />;
+    return <LoadingSpinner text="جاري تحميل سجل السحوبات..." />;
   }
 
   return (
@@ -129,10 +129,10 @@ const WithdrawalHistory = () => {
           </Link>
           <div>
             <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
-              Withdrawal History
+              سجل السحوبات
             </h1>
             <p className="text-gray-600 dark:text-gray-400">
-              Track all your withdrawal requests and their status
+              تتبع جميع طلبات السحب وحالتها
             </p>
           </div>
         </div>
@@ -144,13 +144,13 @@ const WithdrawalHistory = () => {
             disabled={loading}
           >
             <RefreshCw className={`w-4 h-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
-            Refresh
+            تحديث
           </Button>
 
           <Link to="/withdrawal">
             <Button>
               <DollarSign className="w-4 h-4 mr-2" />
-              New Withdrawal
+              سحب جديد
             </Button>
           </Link>
         </div>
@@ -163,13 +163,13 @@ const WithdrawalHistory = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-yellow-700 dark:text-yellow-300 text-sm font-medium">
-                  Pending Requests
+                  الطلبات المعلقة
                 </p>
                 <p className="text-2xl font-bold text-yellow-800 dark:text-yellow-200">
                   {stats.pending.count}
                 </p>
                 <p className="text-sm text-yellow-600 dark:text-yellow-400">
-                  {stats.pending.totalAmount.toLocaleString()} IQD
+                  {stats.pending.totalAmount.toLocaleString()} دينار عراقي
                 </p>
               </div>
               <Clock className="w-8 h-8 text-yellow-600 dark:text-yellow-400" />
@@ -180,13 +180,13 @@ const WithdrawalHistory = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-green-700 dark:text-green-300 text-sm font-medium">
-                  Approved
+                  معتمد
                 </p>
                 <p className="text-2xl font-bold text-green-800 dark:text-green-200">
                   {stats.approved.count}
                 </p>
                 <p className="text-sm text-green-600 dark:text-green-400">
-                  {stats.approved.totalAmount.toLocaleString()} IQD
+                  {stats.approved.totalAmount.toLocaleString()} دينار عراقي
                 </p>
               </div>
               <CheckCircle className="w-8 h-8 text-green-600 dark:text-green-400" />
@@ -197,13 +197,13 @@ const WithdrawalHistory = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-red-700 dark:text-red-300 text-sm font-medium">
-                  Rejected
+                  مرفوض
                 </p>
                 <p className="text-2xl font-bold text-red-800 dark:text-red-200">
                   {stats.rejected.count}
                 </p>
                 <p className="text-sm text-red-600 dark:text-red-400">
-                  {stats.rejected.totalAmount.toLocaleString()} IQD
+                  {stats.rejected.totalAmount.toLocaleString()} دينار عراقي
                 </p>
               </div>
               <XCircle className="w-8 h-8 text-red-600 dark:text-red-400" />
@@ -218,22 +218,22 @@ const WithdrawalHistory = () => {
           <div className="flex items-center space-x-4">
             <Filter className="w-5 h-5 text-gray-600 dark:text-gray-300" />
             <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-              Filter by status:
+              تصفية حسب الحالة:
             </span>
             <select
               value={filter}
               onChange={(e) => setFilter(e.target.value)}
               className="px-3 py-1 border border-gray-300 dark:border-gray-600 rounded-md text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
             >
-              <option value="all">All Requests</option>
-              <option value="pending">Pending</option>
-              <option value="approved">Approved</option>
-              <option value="rejected">Rejected</option>
+              <option value="all">جميع الطلبات</option>
+              <option value="pending">معلق</option>
+              <option value="approved">معتمد</option>
+              <option value="rejected">مرفوض</option>
             </select>
           </div>
 
           <div className="text-sm text-gray-600 dark:text-gray-400">
-            {pagination.total || 0} total requests
+            {pagination.total || 0} طلبًا إجمالي
           </div>
         </div>
       </Card>
@@ -251,7 +251,7 @@ const WithdrawalHistory = () => {
                 <div className="flex-1">
                   <div className="flex items-center space-x-3 mb-2">
                     <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                      {withdrawal.amount.toLocaleString()} IQD
+                      {withdrawal.amount.toLocaleString()} دينار عراقي
                     </h3>
                     {getStatusBadge(withdrawal.status)}
                   </div>
@@ -259,31 +259,31 @@ const WithdrawalHistory = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-600 dark:text-gray-400">
                     <div className="flex items-center space-x-2">
                       <Calendar className="w-4 h-4" />
-                      <span>Requested: {formatDate(withdrawal.createdAt)}</span>
+                      <span>تم الطلب: {formatDate(withdrawal.createdAt)}</span>
                     </div>
 
                     {withdrawal.processedAt && (
                       <div className="flex items-center space-x-2">
                         <Calendar className="w-4 h-4" />
                         <span>
-                          {withdrawal.status === 'approved' ? 'Approved' : 'Processed'}: {formatDate(withdrawal.processedAt)}
+                          {withdrawal.status === 'approved' ? 'تمت الموافقة' : 'تمت المعالجة'}: {formatDate(withdrawal.processedAt)}
                         </span>
                       </div>
                     )}
 
                     <div className="flex items-center space-x-2">
-                      <span>Account: ****{withdrawal.bankDetails?.accountNumber16?.slice(-4) || 'N/A'}</span>
+                      <span>الحساب: ****{withdrawal.bankDetails?.accountNumber16?.slice(-4) || 'غير متاح'}</span>
                     </div>
 
                     <div className="flex items-center space-x-2">
-                      <span>Name: {withdrawal.bankDetails?.accountHolderName || 'N/A'}</span>
+                      <span>الاسم: {withdrawal.bankDetails?.accountHolderName || 'غير متاح'}</span>
                     </div>
                   </div>
 
                   {withdrawal.adminNotes && (
                     <div className="mt-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
                       <p className="text-sm text-gray-700 dark:text-gray-300">
-                        <strong>Admin Notes:</strong> {withdrawal.adminNotes}
+                        <strong>ملاحظات الإدارة:</strong> {withdrawal.adminNotes}
                       </p>
                     </div>
                   )}
@@ -297,13 +297,13 @@ const WithdrawalHistory = () => {
                     size="sm"
                     onClick={() => cancelWithdrawal(withdrawal._id)}
                   >
-                    Cancel
+                    إلغاء
                   </Button>
                 )}
 
                 <div className="text-right">
                   <p className="text-xs text-gray-500 dark:text-gray-400">
-                    ID: {withdrawal._id.slice(-8)}
+                    المعرف: {withdrawal._id.slice(-8)}
                   </p>
                 </div>
               </div>
@@ -315,15 +315,15 @@ const WithdrawalHistory = () => {
           <Card className="p-12 text-center">
             <DollarSign className="w-16 h-16 text-gray-400 mx-auto mb-4" />
             <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
-              No Withdrawal Requests
+              لا توجد طلبات سحب
             </h3>
             <p className="text-gray-600 dark:text-gray-400 mb-6">
-              You haven't made any withdrawal requests yet.
+              لم تقم بتقديم أي طلبات سحب حتى الآن.
             </p>
             <Link to="/withdrawal">
               <Button>
                 <DollarSign className="w-4 h-4 mr-2" />
-                Make Your First Withdrawal
+                قم بسحبك الأول
               </Button>
             </Link>
           </Card>
@@ -339,7 +339,7 @@ const WithdrawalHistory = () => {
             onClick={() => setCurrentPage(currentPage - 1)}
             disabled={currentPage === 1}
           >
-            Previous
+            السابق
           </Button>
 
           <div className="flex space-x-1">
@@ -366,7 +366,7 @@ const WithdrawalHistory = () => {
             onClick={() => setCurrentPage(currentPage + 1)}
             disabled={currentPage === pagination.pages}
           >
-            Next
+            التالي
           </Button>
         </div>
       )}
@@ -375,7 +375,7 @@ const WithdrawalHistory = () => {
       {loading && (
         <div className="fixed inset-0 bg-black/20 flex items-center justify-center z-50">
           <Card className="p-6">
-            <LoadingSpinner size="lg" text="Refreshing..." />
+            <LoadingSpinner size="lg" text="جاري التحديث..." />
           </Card>
         </div>
       )}

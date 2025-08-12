@@ -129,7 +129,7 @@ export const Modal = ({ isOpen, onClose, title, children, size = 'default' }) =>
     sm: 'max-w-md',
     default: 'max-w-lg',
     lg: 'max-w-2xl',
-    xl: 'max-w-4xl'
+    xl: 'max-w-7xl'
   };
 
   if (!isOpen) return null;

@@ -76,40 +76,40 @@ const Withdrawal = () => {
     // Amount validation
     const amount = parseFloat(formData.amount);
     if (!formData.amount) {
-      newErrors.amount = 'Amount is required';
+      newErrors.amount = 'المبلغ مطلوب';
     } else if (isNaN(amount) || amount <= 0) {
-      newErrors.amount = 'Amount must be a positive number';
+      newErrors.amount = 'يجب أن يكون المبلغ رقمًا موجبًا';
     } else if (amount > user?.balance) {
-      newErrors.amount = 'Insufficient balance';
+      newErrors.amount = 'الرصيد غير كافٍ';
     } else if (settings && amount < settings.minimumWithdrawal) {
-      newErrors.amount = `Minimum withdrawal amount is ${settings.minimumWithdrawal} IQD`;
+      newErrors.amount = `الحد الأدنى للسحب هو ${settings.minimumWithdrawal} دينار عراقي`;
     }
 
     // Account number validation
     if (!formData.accountNumber16) {
-      newErrors.accountNumber16 = '16-digit account number is required';
+      newErrors.accountNumber16 = 'رقم الحساب المكون من 16 رقمًا مطلوب';
     } else if (!/^\d{16}$/.test(formData.accountNumber16.replace(/\s/g, ''))) {
-      newErrors.accountNumber16 = 'Must be exactly 16 digits';
+      newErrors.accountNumber16 = 'يجب أن يكون مكونًا من 16 رقمًا بالضبط';
     }
 
     if (!formData.accountNumber10) {
-      newErrors.accountNumber10 = '10-digit account number is required';
+      newErrors.accountNumber10 = 'رقم الحساب المكون من 10 أرقام مطلوب';
     } else if (!/^\d{10}$/.test(formData.accountNumber10.replace(/\s/g, ''))) {
-      newErrors.accountNumber10 = 'Must be exactly 10 digits';
+      newErrors.accountNumber10 = 'يجب أن يكون مكونًا من 10 أرقام بالضبط';
     }
 
     // Account holder name validation
     if (!formData.accountHolderName.trim()) {
-      newErrors.accountHolderName = 'Account holder name is required';
+      newErrors.accountHolderName = 'اسم صاحب الحساب مطلوب';
     } else if (formData.accountHolderName.trim().length < 2) {
-      newErrors.accountHolderName = 'Name must be at least 2 characters';
+      newErrors.accountHolderName = 'يجب أن يكون الاسم مكونًا من حرفين على الأقل';
     }
 
     // WhatsApp number validation
     if (!formData.whatsappNumber) {
-      newErrors.whatsappNumber = 'WhatsApp number is required';
+      newErrors.whatsappNumber = 'رقم واتساب مطلوب';
     } else if (!/^\d{10,15}$/.test(formData.whatsappNumber.replace(/\D/g, ''))) {
-      newErrors.whatsappNumber = 'WhatsApp number must be 10-15 digits';
+      newErrors.whatsappNumber = 'يجب أن يتكون رقم واتساب من 10 إلى 15 رقمًا';
     }
 
     return newErrors;
@@ -143,7 +143,7 @@ const Withdrawal = () => {
         deductBalance(parseFloat(formData.amount));
         setPendingWithdrawal(response.data.withdrawal);
 
-        toast.success('Withdrawal request submitted successfully!');
+        toast.success('تم تقديم طلب السحب بنجاح!');
 
         // Reset form
         setFormData({
@@ -155,7 +155,7 @@ const Withdrawal = () => {
         });
       }
     } catch (error) {
-      const message = error.response?.data?.message || 'Failed to submit withdrawal request';
+      const message = error.response?.data?.message || 'فشل في تقديم طلب السحب';
       toast.error(message);
       setErrors({ general: message });
     } finally {
@@ -179,17 +179,17 @@ const Withdrawal = () => {
   };
 
   if (!user) {
-    return <LoadingSpinner text="Loading user data..." />;
+    return <LoadingSpinner text="جاري تحميل بيانات المستخدم..." />;
   }
 
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
-          Withdraw Earnings
+          سحب الأرباح
         </h1>
         <p className="text-gray-600 dark:text-gray-400">
-          Request to withdraw your earned money to your bank account
+          اطلب سحب أرباحك إلى حسابك البنكي
         </p>
       </div>
 
@@ -202,21 +202,21 @@ const Withdrawal = () => {
                 <Clock className="w-6 h-6 text-yellow-600 dark:text-yellow-400 mt-1" />
                 <div>
                   <h3 className="text-lg font-semibold text-yellow-800 dark:text-yellow-200 mb-2">
-                    Pending Withdrawal Request
+                    طلب سحب معلق
                   </h3>
                   <p className="text-yellow-700 dark:text-yellow-300 mb-4">
-                    You have a withdrawal request of {pendingWithdrawal.amount.toLocaleString()} IQD pending approval.
-                    Please wait 24 hours for processing.
+                    لديك طلب سحب بقيمة {pendingWithdrawal.amount.toLocaleString()} دينار عراقي قيد الانتظار للموافقة.
+                    يرجى الانتظار 24 ساعة للمعالجة.
                   </p>
                   <div className="text-sm text-yellow-600 dark:text-yellow-400">
-                    <p><strong>Requested:</strong> {new Date(pendingWithdrawal.createdAt).toLocaleString()}</p>
-                    <p><strong>Status:</strong> Under Review</p>
+                    <p><strong>تم الطلب:</strong> {new Date(pendingWithdrawal.createdAt).toLocaleString()}</p>
+                    <p><strong>الحالة:</strong> قيد المراجعة</p>
                   </div>
                   <Link
                     to="/withdrawal-history"
                     className="inline-block mt-4 text-yellow-700 dark:text-yellow-300 hover:text-yellow-600 dark:hover:text-yellow-400 font-medium"
                   >
-                    View withdrawal history →
+                    عرض سجل السحوبات →
                   </Link>
                 </div>
               </div>
@@ -233,7 +233,7 @@ const Withdrawal = () => {
                 {/* Amount */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Withdrawal Amount (IQD) <span className="text-red-500">*</span>
+                    مبلغ السحب (دينار عراقي) <span className="text-red-500">*</span>
                   </label>
                   <div className="relative">
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -244,7 +244,7 @@ const Withdrawal = () => {
                       name="amount"
                       value={formData.amount}
                       onChange={handleChange}
-                      placeholder="Enter amount"
+                      placeholder="أدخل المبلغ"
                       className={`pl-10 w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white ${errors.amount ? 'border-red-500' : ''}`}
                     />
                   </div>
@@ -252,10 +252,10 @@ const Withdrawal = () => {
                     <p className="text-sm text-red-600 dark:text-red-400 mt-1">{errors.amount}</p>
                   )}
                   <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                    Available balance: {user.balance?.toLocaleString() || 0} IQD
+                    الرصيد المتاح: {user.balance?.toLocaleString() || 0} دينار عراقي
                     {settings && (
                       <span className="ml-2">
-                        (Minimum: {settings.minimumWithdrawal.toLocaleString()} IQD)
+                        (الحد الأدنى: {settings.minimumWithdrawal.toLocaleString()} دينار عراقي)
                       </span>
                     )}
                   </p>
@@ -264,7 +264,7 @@ const Withdrawal = () => {
                 {/* 16-digit Account Number */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    16-Digit Account Number <span className="text-red-500">*</span>
+                    رقم الحساب المكون من 16 رقمًا <span className="text-red-500">*</span>
                   </label>
                   <div className="relative">
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -287,7 +287,7 @@ const Withdrawal = () => {
                 {/* 10-digit Account Number */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    10-Digit Account Number <span className="text-red-500">*</span>
+                    رقم الحساب المكون من 10 أرقام <span className="text-red-500">*</span>
                   </label>
                   <div className="relative">
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -310,7 +310,7 @@ const Withdrawal = () => {
                 {/* Account Holder Name */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Account Holder Name <span className="text-red-500">*</span>
+                    اسم صاحب الحساب <span className="text-red-500">*</span>
                   </label>
                   <div className="relative">
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -321,7 +321,7 @@ const Withdrawal = () => {
                       name="accountHolderName"
                       value={formData.accountHolderName}
                       onChange={handleChange}
-                      placeholder="Full name as on bank account"
+                      placeholder="الاسم الكامل كما في الحساب البنكي"
                       className={`pl-10 w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white ${errors.accountHolderName ? 'border-red-500' : ''}`}
                     />
                   </div>
@@ -333,7 +333,7 @@ const Withdrawal = () => {
                 {/* WhatsApp Number */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    WhatsApp Number <span className="text-red-500">*</span>
+                    رقم واتساب <span className="text-red-500">*</span>
                   </label>
                   <div className="flex">
                     <span className="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 border border-r-0 border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">
@@ -353,7 +353,7 @@ const Withdrawal = () => {
                     <p className="text-sm text-red-600 dark:text-red-400 mt-1">{errors.whatsappNumber}</p>
                   )}
                   <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                    Used for withdrawal confirmation and updates
+                    تُستخدم للتأكيد والتحديثات الخاصة بالسحب
                   </p>
                 </div>
 
@@ -364,7 +364,7 @@ const Withdrawal = () => {
                   fullWidth
                   size="lg"
                 >
-                  Submit Withdrawal Request
+                  تقديم طلب السحب
                 </Button>
               </form>
             </Card>
@@ -380,13 +380,13 @@ const Withdrawal = () => {
                 <DollarSign className="w-6 h-6 text-green-600 dark:text-green-400" />
               </div>
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                Available Balance
+                الرصيد المتاح
               </h3>
               <p className="text-3xl font-bold text-green-600 dark:text-green-400 mb-2">
-                {user.balance?.toLocaleString() || 0} IQD
+                {user.balance?.toLocaleString() || 0} دينار عراقي
               </p>
               <p className="text-sm text-gray-600 dark:text-gray-400">
-                Total Earned: {user.totalEarned?.toLocaleString() || 0} IQD
+                الإجمالي المكتسب: {user.totalEarned?.toLocaleString() || 0} دينار عراقي
               </p>
             </div>
           </Card>
@@ -394,29 +394,29 @@ const Withdrawal = () => {
           {/* Withdrawal Info */}
           <Card className="p-6">
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-              Withdrawal Information
+              معلومات السحب
             </h3>
             <div className="space-y-3 text-sm">
               <div className="flex items-start space-x-2">
                 <CheckCircle className="w-4 h-4 text-green-600 dark:text-green-400 mt-0.5 flex-shrink-0" />
                 <p className="text-gray-600 dark:text-gray-400">
                   {settings ? (
-                    <>Minimum withdrawal: {settings.minimumWithdrawal.toLocaleString()} IQD</>
+                    <>الحد الأدنى للسحب: {settings.minimumWithdrawal.toLocaleString()} دينار عراقي</>
                   ) : (
-                    'Loading minimum withdrawal amount...'
+                    'جاري تحميل الحد الأدنى للسحب...'
                   )}
                 </p>
               </div>
               <div className="flex items-start space-x-2">
                 <Clock className="w-4 h-4 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
                 <p className="text-gray-600 dark:text-gray-400">
-                  Processing time: 24 hours
+                  وقت المعالجة: 24 ساعة
                 </p>
               </div>
               <div className="flex items-start space-x-2">
                 <AlertCircle className="w-4 h-4 text-orange-600 dark:text-orange-400 mt-0.5 flex-shrink-0" />
                 <p className="text-gray-600 dark:text-gray-400">
-                  Bank details must be accurate to avoid delays
+                  يجب أن تكون تفاصيل البنك دقيقة لتجنب التأخير
                 </p>
               </div>
             </div>
@@ -425,26 +425,26 @@ const Withdrawal = () => {
           {/* Quick Links */}
           <Card className="p-6">
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-              Quick Links
+              روابط سريعة
             </h3>
             <div className="space-y-2">
               <Link
                 to="/withdrawal-history"
                 className="block w-full text-left px-3 py-2 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors"
               >
-                View Withdrawal History
+                عرض سجل السحوبات
               </Link>
               <Link
                 to="/tasks"
                 className="block w-full text-left px-3 py-2 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors"
               >
-                Earn More Money
+                اكسب المزيد من المال
               </Link>
               <Link
                 to="/dashboard"
                 className="block w-full text-left px-3 py-2 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors"
               >
-                Back to Dashboard
+                العودة إلى لوحة التحكم
               </Link>
             </div>
           </Card>
@@ -455,10 +455,10 @@ const Withdrawal = () => {
               <div className="text-center">
                 <Phone className="w-8 h-8 text-blue-600 dark:text-blue-400 mx-auto mb-3" />
                 <h3 className="font-semibold text-blue-900 dark:text-blue-100 mb-2">
-                  Need Help?
+                  تحتاج مساعدة؟
                 </h3>
                 <p className="text-sm text-blue-700 dark:text-blue-300 mb-3">
-                  Contact our support team on WhatsApp
+                  اتصل بفريق الدعم لدينا عبر واتساب
                 </p>
                 <a
                   href={`https://wa.me/${settings.supportWhatsapp.replace(/\D/g, '')}`}
@@ -467,7 +467,7 @@ const Withdrawal = () => {
                   className="inline-flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
                 >
                   <Phone className="w-4 h-4" />
-                  <span>Contact Support</span>
+                  <span>اتصل بالدعم</span>
                 </a>
               </div>
             </Card>

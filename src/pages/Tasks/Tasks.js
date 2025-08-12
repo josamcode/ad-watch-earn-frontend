@@ -37,7 +37,7 @@ const Tasks = () => {
       }
     } catch (error) {
       console.error('Fetch tasks error:', error);
-      toast.error('Failed to load tasks');
+      toast.error('فشل في تحميل المهام');
     } finally {
       setLoading(false);
     }
@@ -55,12 +55,12 @@ const Tasks = () => {
 
   const getTaskStatusBadge = (task) => {
     if (!task.isUnlocked) {
-      return <Badge variant="default">🔒 Locked</Badge>;
+      return <Badge variant="default">🔒 مقفلة</Badge>;
     }
     if (task.completed) {
-      return <Badge variant="success">✅ Completed</Badge>;
+      return <Badge variant="success">✅ مكتملة</Badge>;
     }
-    return <Badge variant="info">▶️ Available</Badge>;
+    return <Badge variant="info">▶️ متاحة</Badge>;
   };
 
   const calculateTotalEarnings = (task) => {
@@ -71,29 +71,29 @@ const Tasks = () => {
   const getUnlockRequirement = (taskNumber) => {
     switch (taskNumber) {
       case 1:
-        return 'Available for all new users';
+        return 'متاحة لجميع المستخدمين الجدد';
       case 2:
-        return 'Complete Task 1 and make a withdrawal';
+        return 'أكمل المهمة 1 وقم بعملية سحب';
       case 3:
-        return 'Complete Task 2 and make a withdrawal';
+        return 'أكمل المهمة 2 وقم بعملية سحب';
       default:
-        return 'Requirements unknown';
+        return 'الشروط غير معروفة';
     }
   };
 
   if (loading) {
-    return <LoadingSpinner text="Loading tasks..." />;
+    return <LoadingSpinner text="جاري تحميل المهام..." />;
   }
 
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
-          Available Tasks
+          المهام المتاحة
         </h1>
         <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-          Complete tasks by watching videos to earn money. Each task must be completed fully to unlock the next one.
+          أكمل المهام من خلال مشاهدة الفيديوهات لكسب المال. يجب إكمال كل مهمة بالكامل لفتح المهمة التالية.
         </p>
       </div>
 
@@ -101,11 +101,11 @@ const Tasks = () => {
       <Card className="p-6 mb-8 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-            Your Progress
+            تقدمك
           </h2>
           <div className="flex items-center space-x-2 text-green-600 dark:text-green-400">
             <DollarSign className="w-5 h-5" />
-            <span className="font-bold">{user?.balance?.toLocaleString() || 0} IQD</span>
+            <span className="font-bold">{user?.balance?.toLocaleString() || 0} دينار عراقي</span>
           </div>
         </div>
 
@@ -129,10 +129,10 @@ const Tasks = () => {
                   {isCompleted ? '✅' : isUnlocked ? '▶️' : '🔒'}
                 </div>
                 <h3 className="font-semibold text-gray-900 dark:text-white">
-                  Task {taskNum}
+                  المهمة {taskNum}
                 </h3>
                 <p className="text-sm text-gray-600 dark:text-gray-400">
-                  {isCompleted ? 'Completed' : isUnlocked ? 'Available' : 'Locked'}
+                  {isCompleted ? 'مكتملة' : isUnlocked ? 'متاحة' : 'مقفلة'}
                 </p>
               </div>
             );
@@ -160,7 +160,7 @@ const Tasks = () => {
                 <div className="flex-1">
                   <div className="flex items-center space-x-3 mb-2">
                     <h3 className="text-xl font-bold text-gray-900 dark:text-white">
-                      Task {task.taskNumber}: {task.title}
+                      المهمة {task.taskNumber}: {task.title}
                     </h3>
                     {getTaskStatusBadge(task)}
                   </div>
@@ -174,21 +174,21 @@ const Tasks = () => {
                     <div className="flex items-center space-x-2">
                       <Video className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                       <span className="text-sm text-gray-600 dark:text-gray-400">
-                        {task.videos?.length || 0} Videos
+                        {task.videos?.length || 0} فيديوهات
                       </span>
                     </div>
 
                     <div className="flex items-center space-x-2">
                       <DollarSign className="w-4 h-4 text-green-600 dark:text-green-400" />
                       <span className="text-sm text-gray-600 dark:text-gray-400">
-                        Up to {calculateTotalEarnings(task).toLocaleString()} IQD
+                        حتى {calculateTotalEarnings(task).toLocaleString()} دينار عراقي
                       </span>
                     </div>
 
                     <div className="flex items-center space-x-2">
                       <Clock className="w-4 h-4 text-purple-600 dark:text-purple-400" />
                       <span className="text-sm text-gray-600 dark:text-gray-400">
-                        {task.videos?.reduce((total, video) => total + video.duration, 0) || 0}s total
+                        {task.videos?.reduce((total, video) => total + video.duration, 0) || 0} ثانية إجمالي
                       </span>
                     </div>
                   </div>
@@ -198,10 +198,10 @@ const Tasks = () => {
                     <div className="mb-4">
                       <div className="flex items-center justify-between mb-2">
                         <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                          Progress
+                          التقدم
                         </span>
                         <span className="text-sm text-gray-600 dark:text-gray-400">
-                          {task.videosWatched?.length || 0}/{task.videos.length} videos
+                          {task.videosWatched?.length || 0}/{task.videos.length} فيديو
                         </span>
                       </div>
                       <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
@@ -221,7 +221,7 @@ const Tasks = () => {
                       <div className="flex items-center space-x-2">
                         <Lock className="w-4 h-4 text-yellow-600 dark:text-yellow-400" />
                         <span className="text-sm font-medium text-yellow-800 dark:text-yellow-200">
-                          Unlock Requirements:
+                          شروط الفتح:
                         </span>
                       </div>
                       <p className="text-sm text-yellow-700 dark:text-yellow-300 mt-1">
@@ -238,7 +238,7 @@ const Tasks = () => {
                   task.completed ? (
                     <div className="flex items-center space-x-2 px-4 py-2 bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 rounded-lg">
                       <CheckCircle className="w-4 h-4" />
-                      <span className="font-medium">Completed</span>
+                      <span className="font-medium">مكتملة</span>
                     </div>
                   ) : (
                     <button
@@ -246,13 +246,13 @@ const Tasks = () => {
                       className="flex items-center space-x-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors font-medium"
                     >
                       <Play className="w-4 h-4" />
-                      <span>Start Task</span>
+                      <span>ابدأ المهمة</span>
                     </button>
                   )
                 ) : (
                   <div className="flex items-center space-x-2 px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 rounded-lg">
                     <Lock className="w-4 h-4" />
-                    <span className="font-medium">Locked</span>
+                    <span className="font-medium">مقفلة</span>
                   </div>
                 )}
               </div>
@@ -264,17 +264,17 @@ const Tasks = () => {
           <Card className="p-12 text-center">
             <Video className="w-16 h-16 text-gray-400 mx-auto mb-4" />
             <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
-              No Tasks Available
+              لا توجد مهام متاحة
             </h3>
             <p className="text-gray-600 dark:text-gray-400 mb-6">
-              Check back later for new earning opportunities!
+              عد لاحقاً للبحث عن فرص كسب جديدة!
             </p>
             <Link
               to="/dashboard"
               className="inline-flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
             >
               <ArrowRight className="w-4 h-4" />
-              <span>Back to Dashboard</span>
+              <span>العودة إلى لوحة التحكم</span>
             </Link>
           </Card>
         )}
@@ -285,7 +285,7 @@ const Tasks = () => {
         <div className="flex items-center space-x-3 mb-4">
           <Star className="w-6 h-6 text-purple-600 dark:text-purple-400" />
           <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-            Tips to Maximize Your Earnings
+            نصائح لزيادة أرباحك
           </h3>
         </div>
 
@@ -295,9 +295,9 @@ const Tasks = () => {
               <span className="text-sm font-bold text-purple-600 dark:text-purple-400">1</span>
             </div>
             <div>
-              <h4 className="font-medium text-gray-900 dark:text-white">Watch Completely</h4>
+              <h4 className="font-medium text-gray-900 dark:text-white">شاهد بالكامل</h4>
               <p className="text-sm text-gray-600 dark:text-gray-400">
-                Make sure to watch each video from start to finish to earn money.
+                تأكد من مشاهدة كل فيديو من البداية إلى النهاية لكسب المال.
               </p>
             </div>
           </div>
@@ -307,9 +307,9 @@ const Tasks = () => {
               <span className="text-sm font-bold text-purple-600 dark:text-purple-400">2</span>
             </div>
             <div>
-              <h4 className="font-medium text-gray-900 dark:text-white">Complete Tasks in Order</h4>
+              <h4 className="font-medium text-gray-900 dark:text-white">أكمل المهام بالترتيب</h4>
               <p className="text-sm text-gray-600 dark:text-gray-400">
-                Finish all videos in Task 1 before Task 2 becomes available.
+                أنهِ جميع الفيديوهات في المهمة 1 قبل أن تصبح المهمة 2 متاحة.
               </p>
             </div>
           </div>

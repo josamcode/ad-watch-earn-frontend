@@ -52,7 +52,7 @@ const AdminWithdrawals = () => {
       }
     } catch (error) {
       console.error('Fetch withdrawals error:', error);
-      toast.error('Failed to load withdrawals');
+      toast.error('فشل تحميل طلبات السحب');
     } finally {
       setLoading(false);
     }
@@ -78,31 +78,31 @@ const AdminWithdrawals = () => {
       });
 
       if (response.data.success) {
-        toast.success(`Withdrawal ${processAction}d successfully`);
+        toast.success(`تم ${processAction === 'approve' ? 'اعتماد' : 'رفض'} الطلب بنجاح`);
         setShowProcessModal(false);
         fetchWithdrawals();
       }
     } catch (error) {
       console.error('Process withdrawal error:', error);
-      toast.error(error.response?.data?.message || 'Failed to process withdrawal');
+      toast.error(error.response?.data?.message || 'فشل في معالجة طلب السحب');
     }
   };
 
   const getStatusBadge = (status) => {
     switch (status) {
       case 'pending':
-        return <Badge variant="warning">⏳ Pending</Badge>;
+        return <Badge variant="warning">⏳ بانتظار المراجعة</Badge>;
       case 'approved':
-        return <Badge variant="success">✅ Approved</Badge>;
+        return <Badge variant="success">✅ معتمد</Badge>;
       case 'rejected':
-        return <Badge variant="danger">❌ Rejected</Badge>;
+        return <Badge variant="danger">❌ مرفوض</Badge>;
       default:
         return <Badge variant="default">{status}</Badge>;
     }
   };
 
   const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
+    return new Date(dateString).toLocaleDateString('ar', {
       year: 'numeric',
       month: 'short',
       day: 'numeric',
@@ -112,7 +112,7 @@ const AdminWithdrawals = () => {
   };
 
   const formatAccountNumber = (number) => {
-    return number ? `****${number.slice(-4)}` : 'N/A';
+    return number ? `****${number.slice(-4)}` : 'غير متوفر';
   };
 
   return (
@@ -121,10 +121,10 @@ const AdminWithdrawals = () => {
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-            Withdrawal Management
+            إدارة طلبات السحب
           </h1>
           <p className="text-gray-600 dark:text-gray-400">
-            Review and process user withdrawal requests
+            راجع وعالج طلبات سحب المستخدمين
           </p>
         </div>
 
@@ -133,33 +133,33 @@ const AdminWithdrawals = () => {
           onClick={fetchWithdrawals}
           disabled={loading}
         >
-          <RefreshCw className={`w-4 h-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
-          Refresh
+          <RefreshCw className={`w-4 h-4 ml-2 ${loading ? 'animate-spin' : ''}`} />
+          تحديث
         </Button>
       </div>
 
       {/* Filters */}
       <Card className="p-6 mb-6">
         <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-reverse space-x-4">
             <Filter className="w-5 h-5 text-gray-600 dark:text-gray-300" />
             <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-              Filter by status:
+              التصفية حسب الحالة:
             </span>
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
               className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
             >
-              <option value="all">All Requests</option>
-              <option value="pending">Pending</option>
-              <option value="approved">Approved</option>
-              <option value="rejected">Rejected</option>
+              <option value="all">جميع الطلبات</option>
+              <option value="pending">بانتظار المراجعة</option>
+              <option value="approved">معتمدة</option>
+              <option value="rejected">مرفوضة</option>
             </select>
           </div>
 
           <div className="text-sm text-gray-600 dark:text-gray-400">
-            {pagination.total || 0} total requests
+            {pagination.total || 0} طلبًا إجمالي
           </div>
         </div>
       </Card>
@@ -168,30 +168,30 @@ const AdminWithdrawals = () => {
       <Card className="overflow-hidden">
         {loading ? (
           <div className="p-8">
-            <LoadingSpinner text="Loading withdrawals..." />
+            <LoadingSpinner text="جاري تحميل طلبات السحب..." />
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
               <thead className="bg-gray-50 dark:bg-gray-700">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                    User
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                    المستخدم
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                    Amount
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                    المبلغ
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                    Bank Details
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                    تفاصيل الحساب
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                    Status
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                    الحالة
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                    Date
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                    التاريخ
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                    Actions
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                    الإجراءات
                   </th>
                 </tr>
               </thead>
@@ -203,33 +203,33 @@ const AdminWithdrawals = () => {
                         <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
                           <User className="w-5 h-5 text-white" />
                         </div>
-                        <div className="ml-4">
+                        <div className="mr-4 text-right">
                           <div className="text-sm font-medium text-gray-900 dark:text-white">
-                            {withdrawal.user?.name || 'Unknown'}
+                            {withdrawal.user?.name || 'غير معروف'}
                           </div>
                           <div className="text-sm text-gray-500 dark:text-gray-400">
-                            {withdrawal.user?.email || 'N/A'}
+                            {withdrawal.user?.email || 'غير متوفر'}
                           </div>
                         </div>
                       </div>
                     </td>
 
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className="px-6 py-4 whitespace-nowrap text-right">
                       <div className="text-lg font-bold text-gray-900 dark:text-white">
-                        {withdrawal.amount.toLocaleString()} IQD
+                        {withdrawal.amount.toLocaleString()} د.ع
                       </div>
                     </td>
 
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900 dark:text-white">
-                        <div className="flex items-center space-x-1 mb-1">
+                      <div className="text-sm text-gray-900 dark:text-white text-right">
+                        <div className="flex items-center space-x-reverse space-x-1 mb-1">
                           <CreditCard className="w-3 h-3 text-gray-400" />
                           <span>{formatAccountNumber(withdrawal.bankDetails?.accountNumber16)}</span>
                         </div>
-                        <div className="flex items-center space-x-1">
+                        <div className="flex items-center space-x-reverse space-x-1">
                           <User className="w-3 h-3 text-gray-400" />
                           <span className="text-gray-500 dark:text-gray-400">
-                            {withdrawal.bankDetails?.accountHolderName || 'N/A'}
+                            {withdrawal.bankDetails?.accountHolderName || 'غير متوفر'}
                           </span>
                         </div>
                       </div>
@@ -239,24 +239,24 @@ const AdminWithdrawals = () => {
                       {getStatusBadge(withdrawal.status)}
                     </td>
 
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400 text-right">
                       <div>{formatDate(withdrawal.createdAt)}</div>
                       {withdrawal.processedAt && (
                         <div className="text-xs">
-                          Processed: {formatDate(withdrawal.processedAt)}
+                          تمت المعالجة: {formatDate(withdrawal.processedAt)}
                         </div>
                       )}
                     </td>
 
-                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                      <div className="flex items-center space-x-2">
+                    <td className="px-6 py-4 whitespace-nowrap text-left text-sm font-medium">
+                      <div className="flex items-center space-x-reverse space-x-2 justify-end">
                         <Button
                           variant="outline"
                           size="sm"
                           onClick={() => handleViewDetails(withdrawal)}
                         >
                           <Eye className="w-3 h-3 mr-1" />
-                          View
+                          عرض
                         </Button>
 
                         {withdrawal.status === 'pending' && (
@@ -267,7 +267,7 @@ const AdminWithdrawals = () => {
                               onClick={() => handleProcessWithdrawal(withdrawal, 'approve')}
                             >
                               <CheckCircle className="w-3 h-3 mr-1" />
-                              Approve
+                              اعتماد
                             </Button>
                             <Button
                               variant="danger"
@@ -275,7 +275,7 @@ const AdminWithdrawals = () => {
                               onClick={() => handleProcessWithdrawal(withdrawal, 'reject')}
                             >
                               <XCircle className="w-3 h-3 mr-1" />
-                              Reject
+                              رفض
                             </Button>
                           </>
                         )}
@@ -287,13 +287,13 @@ const AdminWithdrawals = () => {
             </table>
 
             {withdrawals.length === 0 && (
-              <div className="py-12">
+              <div className="py-12 text-center">
                 <DollarSign className="w-16 h-16 text-gray-400 mx-auto mb-4" />
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                  No Withdrawal Requests
+                  لا توجد طلبات سحب
                 </h3>
                 <p className="text-gray-600 dark:text-gray-400">
-                  No withdrawal requests match your current filters.
+                  لا توجد طلبات سحب مطابقة للتصفية الحالية.
                 </p>
               </div>
             )}
@@ -310,34 +310,34 @@ const AdminWithdrawals = () => {
                   onClick={() => setCurrentPage(currentPage - 1)}
                   disabled={currentPage === 1}
                 >
-                  Previous
+                  السابق
                 </Button>
                 <Button
                   variant="outline"
                   onClick={() => setCurrentPage(currentPage + 1)}
                   disabled={currentPage === pagination.pages}
                 >
-                  Next
+                  التالي
                 </Button>
               </div>
               <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
                 <div>
                   <p className="text-sm text-gray-700 dark:text-gray-300">
-                    Showing <span className="font-medium">{((currentPage - 1) * 20) + 1}</span> to{' '}
+                    عرض من <span className="font-medium">{((currentPage - 1) * 20) + 1}</span> إلى{' '}
                     <span className="font-medium">
                       {Math.min(currentPage * 20, pagination.total)}
                     </span>{' '}
-                    of <span className="font-medium">{pagination.total}</span> results
+                    من أصل <span className="font-medium">{pagination.total}</span> نتيجة
                   </p>
                 </div>
-                <div className="flex space-x-1">
+                <div className="flex space-x-reverse space-x-1">
                   <Button
                     variant="outline"
                     size="sm"
                     onClick={() => setCurrentPage(currentPage - 1)}
                     disabled={currentPage === 1}
                   >
-                    Previous
+                    السابق
                   </Button>
 
                   {[...Array(pagination.pages)].map((_, index) => {
@@ -347,7 +347,7 @@ const AdminWithdrawals = () => {
                         <button
                           key={page}
                           onClick={() => setCurrentPage(page)}
-                          className={`px-3 py-1 text-sm rounded-md ${page === currentPage
+                          className={`px-3 py-1 rounded-md text-sm font-medium ${page === currentPage
                             ? 'bg-blue-600 text-white'
                             : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600'
                             }`}
@@ -365,7 +365,7 @@ const AdminWithdrawals = () => {
                     onClick={() => setCurrentPage(currentPage + 1)}
                     disabled={currentPage === pagination.pages}
                   >
-                    Next
+                    التالي
                   </Button>
                 </div>
               </div>
@@ -378,32 +378,32 @@ const AdminWithdrawals = () => {
       <Modal
         isOpen={showDetailsModal}
         onClose={() => setShowDetailsModal(false)}
-        title="Withdrawal Details"
+        title="تفاصيل طلب السحب"
         size="lg"
       >
         {selectedWithdrawal && (
-          <div className="space-y-6">
+          <div className="space-y-6 text-right">
             {/* User Information */}
             <div>
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                User Information
+                معلومات المستخدم
               </h3>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="text-sm font-medium text-gray-600 dark:text-gray-400">Name</label>
-                  <p className="text-gray-900 dark:text-white">{selectedWithdrawal.user?.name || 'N/A'}</p>
+                  <label className="text-sm font-medium text-gray-600 dark:text-gray-400">الاسم</label>
+                  <p className="text-gray-900 dark:text-white">{selectedWithdrawal.user?.name || 'غير متوفر'}</p>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-gray-600 dark:text-gray-400">Email</label>
-                  <p className="text-gray-900 dark:text-white">{selectedWithdrawal.user?.email || 'N/A'}</p>
+                  <label className="text-sm font-medium text-gray-600 dark:text-gray-400">البريد الإلكتروني</label>
+                  <p className="text-gray-900 dark:text-white">{selectedWithdrawal.user?.email || 'غير متوفر'}</p>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-gray-600 dark:text-gray-400">Phone</label>
-                  <p className="text-gray-900 dark:text-white">{selectedWithdrawal.user?.phoneNumber || 'N/A'}</p>
+                  <label className="text-sm font-medium text-gray-600 dark:text-gray-400">رقم الهاتف</label>
+                  <p className="text-gray-900 dark:text-white">{selectedWithdrawal.user?.phoneNumber || 'غير متوفر'}</p>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-gray-600 dark:text-gray-400">Username</label>
-                  <p className="text-gray-900 dark:text-white">{selectedWithdrawal.user?.username || 'N/A'}</p>
+                  <label className="text-sm font-medium text-gray-600 dark:text-gray-400">اسم المستخدم</label>
+                  <p className="text-gray-900 dark:text-white">{selectedWithdrawal.user?.username || 'غير متوفر'}</p>
                 </div>
               </div>
             </div>
@@ -411,26 +411,26 @@ const AdminWithdrawals = () => {
             {/* Withdrawal Information */}
             <div>
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                Withdrawal Information
+                معلومات السحب
               </h3>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="text-sm font-medium text-gray-600 dark:text-gray-400">Amount</label>
+                  <label className="text-sm font-medium text-gray-600 dark:text-gray-400">المبلغ</label>
                   <p className="text-2xl font-bold text-green-600 dark:text-green-400">
-                    {selectedWithdrawal.amount.toLocaleString()} IQD
+                    {selectedWithdrawal.amount.toLocaleString()} د.ع
                   </p>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-gray-600 dark:text-gray-400">Status</label>
+                  <label className="text-sm font-medium text-gray-600 dark:text-gray-400">الحالة</label>
                   <div className="mt-1">{getStatusBadge(selectedWithdrawal.status)}</div>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-gray-600 dark:text-gray-400">Requested Date</label>
+                  <label className="text-sm font-medium text-gray-600 dark:text-gray-400">تاريخ الطلب</label>
                   <p className="text-gray-900 dark:text-white">{formatDate(selectedWithdrawal.createdAt)}</p>
                 </div>
                 {selectedWithdrawal.processedAt && (
                   <div>
-                    <label className="text-sm font-medium text-gray-600 dark:text-gray-400">Processed Date</label>
+                    <label className="text-sm font-medium text-gray-600 dark:text-gray-400">تاريخ المعالجة</label>
                     <p className="text-gray-900 dark:text-white">{formatDate(selectedWithdrawal.processedAt)}</p>
                   </div>
                 )}
@@ -440,29 +440,29 @@ const AdminWithdrawals = () => {
             {/* Bank Details */}
             <div>
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                Bank Details
+                تفاصيل الحساب البنكي
               </h3>
               <div className="grid grid-cols-1 gap-4">
                 <div>
-                  <label className="text-sm font-medium text-gray-600 dark:text-gray-400">Account Holder Name</label>
-                  <p className="text-gray-900 dark:text-white">{selectedWithdrawal.bankDetails?.accountHolderName || 'N/A'}</p>
+                  <label className="text-sm font-medium text-gray-600 dark:text-gray-400">اسم صاحب الحساب</label>
+                  <p className="text-gray-900 dark:text-white">{selectedWithdrawal.bankDetails?.accountHolderName || 'غير متوفر'}</p>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-gray-600 dark:text-gray-400">16-Digit Account Number</label>
+                  <label className="text-sm font-medium text-gray-600 dark:text-gray-400">رقم الحساب (16 رقمًا)</label>
                   <p className="text-gray-900 dark:text-white font-mono">
-                    {selectedWithdrawal.bankDetails?.accountNumber16 || 'N/A'}
+                    {selectedWithdrawal.bankDetails?.accountNumber16 || 'غير متوفر'}
                   </p>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-gray-600 dark:text-gray-400">10-Digit Account Number</label>
+                  <label className="text-sm font-medium text-gray-600 dark:text-gray-400">رقم الحساب (10 أرقام)</label>
                   <p className="text-gray-900 dark:text-white font-mono">
-                    {selectedWithdrawal.bankDetails?.accountNumber10 || 'N/A'}
+                    {selectedWithdrawal.bankDetails?.accountNumber10 || 'غير متوفر'}
                   </p>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-gray-600 dark:text-gray-400">WhatsApp Number</label>
+                  <label className="text-sm font-medium text-gray-600 dark:text-gray-400">رقم واتساب</label>
                   <p className="text-gray-900 dark:text-white">
-                    +964{selectedWithdrawal.bankDetails?.whatsappNumber || 'N/A'}
+                    +964{selectedWithdrawal.bankDetails?.whatsappNumber || 'غير متوفر'}
                   </p>
                 </div>
               </div>
@@ -472,7 +472,7 @@ const AdminWithdrawals = () => {
             {selectedWithdrawal.adminNotes && (
               <div>
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                  Admin Notes
+                  ملاحظات المشرف
                 </h3>
                 <p className="text-gray-900 dark:text-white bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
                   {selectedWithdrawal.adminNotes}
@@ -488,7 +488,7 @@ const AdminWithdrawals = () => {
             onClick={() => setShowDetailsModal(false)}
             fullWidth
           >
-            Close
+            إغلاق
           </Button>
         </div>
       </Modal>
@@ -497,35 +497,35 @@ const AdminWithdrawals = () => {
       <Modal
         isOpen={showProcessModal}
         onClose={() => setShowProcessModal(false)}
-        title={`${processAction === 'approve' ? 'Approve' : 'Reject'} Withdrawal`}
+        title={`${processAction === 'approve' ? 'اعتماد' : 'رفض'} طلب السحب`}
         size="lg"
       >
         {selectedWithdrawal && (
-          <div className="space-y-4">
+          <div className="space-y-4 text-right">
             <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
               <h4 className="font-semibold text-gray-900 dark:text-white mb-2">
-                Withdrawal Summary
+                ملخص الطلب
               </h4>
               <div className="grid grid-cols-2 gap-4 text-sm">
                 <div>
-                  <span className="text-gray-600 dark:text-gray-400">User:</span>
-                  <span className="ml-2 text-gray-900 dark:text-white">{selectedWithdrawal.user?.name}</span>
+                  <span className="text-gray-600 dark:text-gray-400">المستخدم:</span>
+                  <span className="mr-2 text-gray-900 dark:text-white">{selectedWithdrawal.user?.name}</span>
                 </div>
                 <div>
-                  <span className="text-gray-600 dark:text-gray-400">Amount:</span>
-                  <span className="ml-2 text-gray-900 dark:text-white font-bold">
-                    {selectedWithdrawal.amount.toLocaleString()} IQD
+                  <span className="text-gray-600 dark:text-gray-400">المبلغ:</span>
+                  <span className="mr-2 text-gray-900 dark:text-white font-bold">
+                    {selectedWithdrawal.amount.toLocaleString()} د.ع
                   </span>
                 </div>
                 <div>
-                  <span className="text-gray-600 dark:text-gray-400">Account:</span>
-                  <span className="ml-2 text-gray-900 dark:text-white">
+                  <span className="text-gray-600 dark:text-gray-400">الحساب:</span>
+                  <span className="mr-2 text-gray-900 dark:text-white">
                     {formatAccountNumber(selectedWithdrawal.bankDetails?.accountNumber16)}
                   </span>
                 </div>
                 <div>
-                  <span className="text-gray-600 dark:text-gray-400">Name:</span>
-                  <span className="ml-2 text-gray-900 dark:text-white">
+                  <span className="text-gray-600 dark:text-gray-400">الاسم:</span>
+                  <span className="mr-2 text-gray-900 dark:text-white">
                     {selectedWithdrawal.bankDetails?.accountHolderName}
                   </span>
                 </div>
@@ -534,7 +534,7 @@ const AdminWithdrawals = () => {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Admin Notes {processAction === 'reject' && <span className="text-red-500">*</span>}
+                ملاحظات المشرف {processAction === 'reject' && <span className="text-red-500">*</span>}
               </label>
               <textarea
                 value={adminNotes}
@@ -543,19 +543,19 @@ const AdminWithdrawals = () => {
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                 placeholder={
                   processAction === 'approve'
-                    ? 'Optional approval notes...'
-                    : 'Required: Reason for rejection...'
+                    ? 'ملاحظات اختيارية...'
+                    : 'مطلوب: سبب الرفض...'
                 }
               />
             </div>
 
-            <div className="flex space-x-3 mt-6">
+            <div className="flex space-x-reverse space-x-3 mt-6">
               <Button
                 variant="outline"
                 onClick={() => setShowProcessModal(false)}
                 fullWidth
               >
-                Cancel
+                إلغاء
               </Button>
               <Button
                 variant={processAction === 'approve' ? 'success' : 'danger'}
@@ -563,7 +563,7 @@ const AdminWithdrawals = () => {
                 disabled={processAction === 'reject' && !adminNotes.trim()}
                 fullWidth
               >
-                {processAction === 'approve' ? 'Approve Withdrawal' : 'Reject Withdrawal'}
+                {processAction === 'approve' ? 'اعتماد السحب' : 'رفض السحب'}
               </Button>
             </div>
           </div>
@@ -582,7 +582,7 @@ export const AdminSettings = () => {
     maxDailyWithdrawals: 3,
     platformCommission: 0,
     maintenanceMode: false,
-    welcomeMessage: 'Welcome to our video earnings platform!',
+    welcomeMessage: 'مرحبًا بك في منصتنا لكسب المال من المشاهدات!',
     supportWhatsapp: '+964XXXXXXXXX'
   });
 
@@ -600,7 +600,7 @@ export const AdminSettings = () => {
       }
     } catch (error) {
       console.error('Fetch settings error:', error);
-      toast.error('Failed to load settings');
+      toast.error('فشل تحميل الإعدادات');
     } finally {
       setLoading(false);
     }
@@ -620,28 +620,28 @@ export const AdminSettings = () => {
       const response = await axios.put('/admin/settings', settings);
 
       if (response.data.success) {
-        toast.success('Settings updated successfully');
+        toast.success('تم تحديث الإعدادات بنجاح');
       }
     } catch (error) {
       console.error('Update settings error:', error);
-      toast.error('Failed to update settings');
+      toast.error('فشل في تحديث الإعدادات');
     } finally {
       setSaving(false);
     }
   };
 
   if (loading) {
-    return <LoadingSpinner text="Loading settings..." />;
+    return <LoadingSpinner text="جاري تحميل الإعدادات..." />;
   }
 
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-          Platform Settings
+          إعدادات النظام
         </h1>
         <p className="text-gray-600 dark:text-gray-400">
-          Configure global platform settings and policies
+          قم بتكوين إعدادات النظام العامة وسياساته
         </p>
       </div>
 
@@ -649,12 +649,12 @@ export const AdminSettings = () => {
         {/* Withdrawal Settings */}
         <Card className="p-6">
           <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">
-            Withdrawal Settings
+            إعدادات السحب
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <Input
-              label="Minimum Withdrawal Amount (IQD)"
+              label="الحد الأدنى للسحب (د.ع)"
               name="minimumWithdrawal"
               type="number"
               value={settings.minimumWithdrawal}
@@ -663,7 +663,7 @@ export const AdminSettings = () => {
             />
 
             <Input
-              label="Maximum Daily Withdrawals per User"
+              label="الحد الأقصى للسحب اليومي للمستخدم"
               name="maxDailyWithdrawals"
               type="number"
               value={settings.maxDailyWithdrawals}
@@ -672,7 +672,7 @@ export const AdminSettings = () => {
             />
 
             <Input
-              label="Platform Commission (%)"
+              label="عمولة النظام (%)"
               name="platformCommission"
               type="number"
               value={settings.platformCommission}
@@ -687,11 +687,11 @@ export const AdminSettings = () => {
         {/* Platform Settings */}
         <Card className="p-6">
           <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">
-            Platform Settings
+            إعدادات النظام
           </h2>
 
           <div className="space-y-6">
-            <div className="flex items-center space-x-3">
+            <div className="flex items-center space-x-reverse space-x-3">
               <input
                 type="checkbox"
                 id="maintenanceMode"
@@ -702,17 +702,17 @@ export const AdminSettings = () => {
               />
               <div>
                 <label htmlFor="maintenanceMode" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Maintenance Mode
+                  وضع الصيانة
                 </label>
                 <p className="text-xs text-gray-600 dark:text-gray-400">
-                  Enable to prevent new user registrations and transactions
+                  فعّل هذا الخيار لمنع تسجيلات المستخدمين الجدد والمعاملات
                 </p>
               </div>
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Welcome Message
+                رسالة الترحيب
               </label>
               <textarea
                 name="welcomeMessage"
@@ -720,12 +720,12 @@ export const AdminSettings = () => {
                 onChange={handleChange}
                 rows={3}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                placeholder="Enter welcome message for new users..."
+                placeholder="أدخل رسالة ترحيب للمستخدمين الجدد..."
               />
             </div>
 
             <Input
-              label="Support WhatsApp Number"
+              label="رقم دعم الواتساب"
               name="supportWhatsapp"
               value={settings.supportWhatsapp}
               onChange={handleChange}
@@ -735,20 +735,20 @@ export const AdminSettings = () => {
         </Card>
 
         {/* Actions */}
-        <div className="flex justify-end space-x-3">
+        <div className="flex justify-end space-x-reverse space-x-3">
           <Button
             variant="outline"
             onClick={fetchSettings}
             disabled={saving}
           >
-            Reset Changes
+            إعادة التعيين
           </Button>
 
           <Button
             onClick={handleSave}
             loading={saving}
           >
-            Save Settings
+            حفظ الإعدادات
           </Button>
         </div>
       </div>

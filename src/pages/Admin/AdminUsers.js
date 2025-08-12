@@ -60,7 +60,7 @@ const AdminUsers = () => {
       }
     } catch (error) {
       console.error('Fetch users error:', error);
-      toast.error('Failed to load users');
+      toast.error('فشل تحميل المستخدمين');
     } finally {
       setLoading(false);
     }
@@ -87,13 +87,13 @@ const AdminUsers = () => {
       const response = await axios.put(`/admin/users/${selectedUser._id}`, editFormData);
 
       if (response.data.success) {
-        toast.success('User updated successfully');
+        toast.success('تم تحديث المستخدم بنجاح');
         setShowEditModal(false);
         fetchUsers();
       }
     } catch (error) {
       console.error('Update user error:', error);
-      toast.error(error.response?.data?.message || 'Failed to update user');
+      toast.error(error.response?.data?.message || 'فشل في تحديث المستخدم');
     }
   };
 
@@ -105,17 +105,17 @@ const AdminUsers = () => {
       );
 
       if (response.data.success) {
-        toast.success(`Task ${taskNumber} ${unlock ? 'unlocked' : 'locked'} successfully`);
+        toast.success(`تم ${unlock ? 'فتح' : 'قفل'} المهمة ${taskNumber} بنجاح`);
         fetchUsers();
       }
     } catch (error) {
       console.error('Toggle task error:', error);
-      toast.error('Failed to toggle task');
+      toast.error('فشل في تغيير حالة المهمة');
     }
   };
 
   const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
+    return new Date(dateString).toLocaleDateString('ar', {
       year: 'numeric',
       month: 'short',
       day: 'numeric'
@@ -124,8 +124,8 @@ const AdminUsers = () => {
 
   const getStatusBadge = (isActive) => {
     return isActive
-      ? <Badge variant="success">Active</Badge>
-      : <Badge variant="danger">Inactive</Badge>;
+      ? <Badge variant="success">مفعل</Badge>
+      : <Badge variant="danger">معطل</Badge>;
   };
 
   const isTaskUnlocked = (user, taskNumber) => {
@@ -142,10 +142,10 @@ const AdminUsers = () => {
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-            User Management
+            إدارة المستخدمين
           </h1>
           <p className="text-gray-600 dark:text-gray-400">
-            Manage user accounts, balances, and task access
+            قم بإدارة حسابات المستخدمين، الأرصدة، ووصول المهام
           </p>
         </div>
 
@@ -156,12 +156,12 @@ const AdminUsers = () => {
             disabled={loading}
           >
             <RefreshCw className={`w-4 h-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
-            Refresh
+            تحديث
           </Button>
 
           <Button variant="outline">
             <Download className="w-4 h-4 mr-2" />
-            Export
+            تصدير
           </Button>
         </div>
       </div>
@@ -173,7 +173,7 @@ const AdminUsers = () => {
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
             <input
               type="text"
-              placeholder="Search users..."
+              placeholder="البحث عن مستخدمين..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="pl-10 w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
@@ -187,15 +187,15 @@ const AdminUsers = () => {
               onChange={(e) => setStatusFilter(e.target.value)}
               className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
             >
-              <option value="all">All Users</option>
-              <option value="active">Active Only</option>
-              <option value="inactive">Inactive Only</option>
+              <option value="all">جميع المستخدمين</option>
+              <option value="active">المستخدمون النشطون فقط</option>
+              <option value="inactive">غير النشطين فقط</option>
             </select>
           </div>
 
           <div className="text-right">
             <p className="text-sm text-gray-600 dark:text-gray-400 py-2">
-              {pagination.total || 0} total users
+              {pagination.total || 0} مستخدمًا إجمالي
             </p>
           </div>
         </div>
@@ -205,33 +205,33 @@ const AdminUsers = () => {
       <Card className="overflow-hidden">
         {loading ? (
           <div className="p-8">
-            <LoadingSpinner text="Loading users..." />
+            <LoadingSpinner text="جاري تحميل المستخدمين..." />
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
               <thead className="bg-gray-50 dark:bg-gray-700">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                    User
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                    المستخدم
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                    Contact
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                    جهة الاتصال
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                    Balance
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                    الرصيد
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                    Tasks
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                    المهام
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                    Status
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                    الحالة
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                    Joined
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                    تاريخ الانضمام
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                    Actions
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                    الإجراءات
                   </th>
                 </tr>
               </thead>
@@ -243,7 +243,7 @@ const AdminUsers = () => {
                         <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
                           <Users className="w-5 h-5 text-white" />
                         </div>
-                        <div className="ml-4">
+                        <div className="mr-4 text-right">
                           <div className="text-sm font-medium text-gray-900 dark:text-white">
                             {user.name}
                           </div>
@@ -255,29 +255,29 @@ const AdminUsers = () => {
                     </td>
 
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900 dark:text-white">
-                        <div className="flex items-center space-x-1 mb-1">
+                      <div className="text-sm text-gray-900 dark:text-white text-right">
+                        <div className="flex items-center space-x-reverse space-x-1 mb-1">
                           <Mail className="w-3 h-3 text-gray-400" />
                           <span>{user.email}</span>
                         </div>
-                        <div className="flex items-center space-x-1">
+                        <div className="flex items-center space-x-reverse space-x-1">
                           <Phone className="w-3 h-3 text-gray-400" />
                           <span className="text-gray-500 dark:text-gray-400">{user.phoneNumber}</span>
                         </div>
                       </div>
                     </td>
 
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className="px-6 py-4 whitespace-nowrap text-right">
                       <div className="text-sm text-gray-900 dark:text-white">
-                        <div className="font-medium">{user.balance?.toLocaleString() || 0} IQD</div>
+                        <div className="font-medium">{user.balance?.toLocaleString() || 0} د.ع</div>
                         <div className="text-gray-500 dark:text-gray-400">
-                          Total: {user.totalEarned?.toLocaleString() || 0} IQD
+                          الإجمالي: {user.totalEarned?.toLocaleString() || 0} د.ع
                         </div>
                       </div>
                     </td>
 
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex space-x-1">
+                      <div className="flex space-x-reverse space-x-1 justify-end">
                         {[1, 2, 3].map((taskNum) => (
                           <span
                             key={taskNum}
@@ -288,7 +288,7 @@ const AdminUsers = () => {
                                 : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'
                               }`}
                           >
-                            T{taskNum}
+                            م{taskNum}
                           </span>
                         ))}
                       </div>
@@ -298,27 +298,27 @@ const AdminUsers = () => {
                       {getStatusBadge(user.isActive)}
                     </td>
 
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400 text-right">
                       {formatDate(user.createdAt)}
                     </td>
 
-                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                      <div className="flex items-center space-x-2">
+                    <td className="px-6 py-4 whitespace-nowrap text-left text-sm font-medium">
+                      <div className="flex items-center space-x-reverse space-x-2 justify-end">
                         <Button
                           variant="outline"
                           size="sm"
                           onClick={() => handleEditUser(user)}
                         >
-                          <Edit className="w-3 h-3 mr-1" />
-                          Edit
+                          <Edit className="w-3 h-3 ml-1" />
+                          تعديل
                         </Button>
                         <Button
                           variant="outline"
                           size="sm"
                           onClick={() => handleTaskManagement(user)}
                         >
-                          <Unlock className="w-3 h-3 mr-1" />
-                          Tasks
+                          <Unlock className="w-3 h-3 ml-1" />
+                          المهام
                         </Button>
                       </div>
                     </td>
@@ -328,13 +328,13 @@ const AdminUsers = () => {
             </table>
 
             {users.length === 0 && (
-              <div className="py-12">
+              <div className="py-12 text-center">
                 <Users className="w-16 h-16 text-gray-400 mx-auto mb-4" />
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                  No Users Found
+                  لا توجد مستخدمين
                 </h3>
                 <p className="text-gray-600 dark:text-gray-400">
-                  No users match your current filters.
+                  لا يوجد مستخدمين مطابقين للتصفية الحالية.
                 </p>
               </div>
             )}
@@ -351,34 +351,34 @@ const AdminUsers = () => {
                   onClick={() => setCurrentPage(currentPage - 1)}
                   disabled={currentPage === 1}
                 >
-                  Previous
+                  السابق
                 </Button>
                 <Button
                   variant="outline"
                   onClick={() => setCurrentPage(currentPage + 1)}
                   disabled={currentPage === pagination.pages}
                 >
-                  Next
+                  التالي
                 </Button>
               </div>
               <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
                 <div>
                   <p className="text-sm text-gray-700 dark:text-gray-300">
-                    Showing <span className="font-medium">{((currentPage - 1) * 20) + 1}</span> to{' '}
+                    عرض من <span className="font-medium">{((currentPage - 1) * 20) + 1}</span> إلى{' '}
                     <span className="font-medium">
                       {Math.min(currentPage * 20, pagination.total)}
                     </span>{' '}
-                    of <span className="font-medium">{pagination.total}</span> results
+                    من أصل <span className="font-medium">{pagination.total}</span> نتيجة
                   </p>
                 </div>
-                <div className="flex space-x-1">
+                <div className="flex space-x-reverse space-x-1">
                   <Button
                     variant="outline"
                     size="sm"
                     onClick={() => setCurrentPage(currentPage - 1)}
                     disabled={currentPage === 1}
                   >
-                    Previous
+                    السابق
                   </Button>
 
                   {[...Array(pagination.pages)].map((_, index) => {
@@ -406,7 +406,7 @@ const AdminUsers = () => {
                     onClick={() => setCurrentPage(currentPage + 1)}
                     disabled={currentPage === pagination.pages}
                   >
-                    Next
+                    التالي
                   </Button>
                 </div>
               </div>
@@ -419,31 +419,31 @@ const AdminUsers = () => {
       <Modal
         isOpen={showEditModal}
         onClose={() => setShowEditModal(false)}
-        title="Edit User"
+        title="تعديل المستخدم"
         size="lg"
       >
         <div className="space-y-4">
           <Input
-            label="Full Name"
+            label="الاسم الكامل"
             value={editFormData.name}
             onChange={(e) => setEditFormData(prev => ({ ...prev, name: e.target.value }))}
           />
 
           <Input
-            label="Email Address"
+            label="عنوان البريد الإلكتروني"
             type="email"
             value={editFormData.email}
             onChange={(e) => setEditFormData(prev => ({ ...prev, email: e.target.value }))}
           />
 
           <Input
-            label="Balance (IQD)"
+            label="الرصيد (د.ع)"
             type="number"
             value={editFormData.balance}
             onChange={(e) => setEditFormData(prev => ({ ...prev, balance: parseFloat(e.target.value) || 0 }))}
           />
 
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-reverse space-x-2">
             <input
               type="checkbox"
               id="isActive"
@@ -452,24 +452,24 @@ const AdminUsers = () => {
               className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
             />
             <label htmlFor="isActive" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-              Account Active
+              الحساب نشط
             </label>
           </div>
         </div>
 
-        <div className="flex space-x-3 mt-6">
+        <div className="flex space-x-reverse space-x-3 mt-6">
           <Button
             variant="outline"
             onClick={() => setShowEditModal(false)}
             fullWidth
           >
-            Cancel
+            إلغاء
           </Button>
           <Button
             onClick={handleUpdateUser}
             fullWidth
           >
-            Save Changes
+            حفظ التغييرات
           </Button>
         </div>
       </Modal>
@@ -478,7 +478,7 @@ const AdminUsers = () => {
       <Modal
         isOpen={showTaskModal}
         onClose={() => setShowTaskModal(false)}
-        title={`Task Management - ${selectedUser?.name}`}
+        title={`إدارة المهام - ${selectedUser?.name}`}
         size="lg"
       >
         <div className="space-y-4">
@@ -488,18 +488,18 @@ const AdminUsers = () => {
 
             return (
               <div key={taskNum} className="flex items-center justify-between p-4 border border-gray-200 dark:border-gray-600 rounded-lg">
-                <div>
+                <div className="text-right">
                   <h4 className="font-medium text-gray-900 dark:text-white">
-                    Task {taskNum}
+                    المهمة {taskNum}
                   </h4>
                   <p className="text-sm text-gray-600 dark:text-gray-400">
-                    Status: {isCompleted ? 'Completed' : isUnlocked ? 'Unlocked' : 'Locked'}
+                    الحالة: {isCompleted ? 'مكتملة' : isUnlocked ? 'مفتوحة' : 'مقفولة'}
                   </p>
                 </div>
 
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center space-x-reverse space-x-2">
                   {isCompleted ? (
-                    <Badge variant="success">Completed</Badge>
+                    <Badge variant="success">مكتملة</Badge>
                   ) : (
                     <Button
                       variant={isUnlocked ? "danger" : "success"}
@@ -508,13 +508,13 @@ const AdminUsers = () => {
                     >
                       {isUnlocked ? (
                         <>
-                          <Lock className="w-3 h-3 mr-1" />
-                          Lock
+                          <Lock className="w-3 h-3 ml-1" />
+                          قفل
                         </>
                       ) : (
                         <>
-                          <Unlock className="w-3 h-3 mr-1" />
-                          Unlock
+                          <Unlock className="w-3 h-3 ml-1" />
+                          فتح
                         </>
                       )}
                     </Button>
@@ -531,7 +531,7 @@ const AdminUsers = () => {
             onClick={() => setShowTaskModal(false)}
             fullWidth
           >
-            Close
+            إغلاق
           </Button>
         </div>
       </Modal>

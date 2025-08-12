@@ -31,10 +31,10 @@ const Login = () => {
     // Basic validation
     const newErrors = {};
     if (!formData.username.trim()) {
-      newErrors.username = 'Username or email is required';
+      newErrors.username = 'اسم المستخدم أو البريد مطلوب';
     }
     if (!formData.password) {
-      newErrors.password = 'Password is required';
+      newErrors.password = 'كلمة المرور مطلوبة';
     }
 
     if (Object.keys(newErrors).length > 0) {
@@ -49,7 +49,7 @@ const Login = () => {
         setErrors({ general: result.message });
       }
     } catch (error) {
-      setErrors({ general: 'An unexpected error occurred' });
+      setErrors({ general: 'حدث خطأ غير متوقع' });
     }
 
     setLoading(false);
@@ -66,10 +66,10 @@ const Login = () => {
             </div>
           </div>
           <h2 className="mt-6 text-3xl font-extrabold text-gray-900 dark:text-white">
-            Welcome Back
+            مرحبًا بعودتك
           </h2>
           <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-            Sign in to your account to start earning
+            سجّل الدخول إلى حسابك لبدء كسب الأرباح
           </p>
         </div>
 
@@ -83,30 +83,30 @@ const Login = () => {
             )}
 
             <Input
-              label="Username or Email"
+              label="اسم المستخدم أو البريد الإلكتروني"
               name="username"
               type="text"
               required
               value={formData.username}
               onChange={handleChange}
               error={errors.username}
-              placeholder="Enter your username or email"
+              placeholder="أدخل اسم المستخدم أو البريد الإلكتروني"
             />
 
             <div className="relative">
               <Input
-                label="Password"
+                label="كلمة المرور"
                 name="password"
                 type={showPassword ? 'text' : 'password'}
                 required
                 value={formData.password}
                 onChange={handleChange}
                 error={errors.password}
-                placeholder="Enter your password"
+                placeholder="أدخل كلمة المرور"
               />
               <button
                 type="button"
-                className="absolute right-3 top-8 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                className="absolute left-3 top-8 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
                 onClick={() => setShowPassword(!showPassword)}
               >
                 {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
@@ -120,18 +120,18 @@ const Login = () => {
               size="lg"
               className="mt-6"
             >
-              Sign In
+              تسجيل الدخول
             </Button>
           </form>
 
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-600 dark:text-gray-400">
-              Don't have an account?{' '}
+              ليس لديك حساب؟{' '}
               <Link
                 to="/register"
                 className="font-medium text-blue-600 hover:text-blue-500 dark:text-blue-400"
               >
-                Sign up here
+                سجّل من هنا
               </Link>
             </p>
           </div>
@@ -139,28 +139,28 @@ const Login = () => {
 
         {/* Features */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
-          <div className="p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+          <div className="p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm text-center">
             <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center mx-auto mb-2">
               <Video className="w-5 h-5 text-blue-600 dark:text-blue-400" />
             </div>
-            <h3 className="text-sm font-medium text-gray-900 dark:text-white">Watch Videos</h3>
-            <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">Earn money by watching videos</p>
+            <h3 className="text-sm font-medium text-gray-900 dark:text-white">شاهد الفيديوهات</h3>
+            <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">اكسب المال من خلال مشاهدة الفيديوهات</p>
           </div>
 
-          <div className="p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+          <div className="p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm text-center">
             <div className="w-10 h-10 bg-green-100 dark:bg-green-900 rounded-lg flex items-center justify-center mx-auto mb-2">
-              <span className="text-green-600 dark:text-green-400 font-bold text-lg">IQD</span>
+              <span className="text-green-600 dark:text-green-400 font-bold text-lg">د.ع</span>
             </div>
-            <h3 className="text-sm font-medium text-gray-900 dark:text-white">Earn Money</h3>
-            <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">Get paid in Iraqi Dinars</p>
+            <h3 className="text-sm font-medium text-gray-900 dark:text-white">اكسب المال</h3>
+            <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">احصل على أموال بالدينار العراقي</p>
           </div>
 
-          <div className="p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+          <div className="p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm text-center">
             <div className="w-10 h-10 bg-purple-100 dark:bg-purple-900 rounded-lg flex items-center justify-center mx-auto mb-2">
-              <span className="text-purple-600 dark:text-purple-400 font-bold text-lg">$</span>
+              <span className="text-purple-600 dark:text-purple-400 font-bold text-lg">💸</span>
             </div>
-            <h3 className="text-sm font-medium text-gray-900 dark:text-white">Withdraw</h3>
-            <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">Easy bank withdrawals</p>
+            <h3 className="text-sm font-medium text-gray-900 dark:text-white">السحب</h3>
+            <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">سحب سهل إلى الحساب البنكي</p>
           </div>
         </div>
       </div>
@@ -197,39 +197,39 @@ export const Register = () => {
     const newErrors = {};
 
     if (!formData.name.trim()) {
-      newErrors.name = 'Name is required';
+      newErrors.name = 'الاسم مطلوب';
     } else if (formData.name.trim().length < 2) {
-      newErrors.name = 'Name must be at least 2 characters';
+      newErrors.name = 'يجب أن يكون الاسم مكونًا من حرفين على الأقل';
     }
 
     if (!formData.email.trim()) {
-      newErrors.email = 'Email is required';
+      newErrors.email = 'البريد الإلكتروني مطلوب';
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Email is invalid';
+      newErrors.email = 'صيغة البريد الإلكتروني غير صحيحة';
     }
 
     if (!formData.username.trim()) {
-      newErrors.username = 'Username is required';
+      newErrors.username = 'اسم المستخدم مطلوب';
     } else if (formData.username.trim().length < 3) {
-      newErrors.username = 'Username must be at least 3 characters';
+      newErrors.username = 'يجب أن يكون اسم المستخدم مكونًا من 3 أحرف على الأقل';
     }
 
     if (!formData.password) {
-      newErrors.password = 'Password is required';
+      newErrors.password = 'كلمة المرور مطلوبة';
     } else if (formData.password.length < 6) {
-      newErrors.password = 'Password must be at least 6 characters';
+      newErrors.password = 'يجب أن تكون كلمة المرور مكونة من 6 أحرف على الأقل';
     }
 
     if (!formData.confirmPassword) {
-      newErrors.confirmPassword = 'Please confirm your password';
+      newErrors.confirmPassword = 'يرجى تأكيد كلمة المرور';
     } else if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = 'Passwords do not match';
+      newErrors.confirmPassword = 'كلمتا المرور غير متطابقتين';
     }
 
     if (!formData.phoneNumber.trim()) {
-      newErrors.phoneNumber = 'Phone number is required';
+      newErrors.phoneNumber = 'رقم الهاتف مطلوب';
     } else if (!/^\d{10}$/.test(formData.phoneNumber.replace(/\D/g, ''))) {
-      newErrors.phoneNumber = 'Phone number must be 10 digits';
+      newErrors.phoneNumber = 'يجب أن يكون رقم الهاتف مكونًا من 10 أرقام';
     }
 
     return newErrors;
@@ -261,7 +261,7 @@ export const Register = () => {
         setErrors({ general: result.message });
       }
     } catch (error) {
-      setErrors({ general: 'An unexpected error occurred' });
+      setErrors({ general: 'حدث خطأ غير متوقع' });
     }
 
     setLoading(false);
@@ -278,10 +278,10 @@ export const Register = () => {
             </div>
           </div>
           <h2 className="mt-6 text-3xl font-extrabold text-gray-900 dark:text-white">
-            Create Account
+            إنشاء حساب
           </h2>
           <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-            Join thousands earning money by watching videos
+            انضم إلى آلاف الأشخاص الذين يكسبون المال من مشاهدة الفيديوهات
           </p>
         </div>
 
@@ -295,52 +295,52 @@ export const Register = () => {
             )}
 
             <Input
-              label="Full Name"
+              label="الاسم الكامل"
               name="name"
               type="text"
               required
               value={formData.name}
               onChange={handleChange}
               error={errors.name}
-              placeholder="Enter your full name"
+              placeholder="أدخل اسمك الكامل"
             />
 
             <Input
-              label="Email Address"
+              label="عنوان البريد الإلكتروني"
               name="email"
               type="email"
               required
               value={formData.email}
               onChange={handleChange}
               error={errors.email}
-              placeholder="Enter your email"
+              placeholder="أدخل بريدك الإلكتروني"
             />
 
             <Input
-              label="Username"
+              label="اسم المستخدم"
               name="username"
               type="text"
               required
               value={formData.username}
               onChange={handleChange}
               error={errors.username}
-              placeholder="Choose a username"
+              placeholder="اختر اسم مستخدم"
             />
 
             <div className="relative">
               <Input
-                label="Password"
+                label="كلمة المرور"
                 name="password"
                 type={showPassword ? 'text' : 'password'}
                 required
                 value={formData.password}
                 onChange={handleChange}
                 error={errors.password}
-                placeholder="Create a password"
+                placeholder="أنشئ كلمة مرور"
               />
               <button
                 type="button"
-                className="absolute right-3 top-8 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                className="absolute left-3 top-8 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
                 onClick={() => setShowPassword(!showPassword)}
               >
                 {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
@@ -349,18 +349,18 @@ export const Register = () => {
 
             <div className="relative">
               <Input
-                label="Confirm Password"
+                label="تأكيد كلمة المرور"
                 name="confirmPassword"
                 type={showConfirmPassword ? 'text' : 'password'}
                 required
                 value={formData.confirmPassword}
                 onChange={handleChange}
                 error={errors.confirmPassword}
-                placeholder="Confirm your password"
+                placeholder="أكد كلمة المرور"
               />
               <button
                 type="button"
-                className="absolute right-3 top-8 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                className="absolute left-3 top-8 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
               >
                 {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
@@ -368,25 +368,25 @@ export const Register = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Phone Number <span className="text-red-500">*</span>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 text-right">
+                رقم الهاتف <span className="text-red-500">*</span>
               </label>
-              <div className="flex">
-                <span className="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 border border-r-0 border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">
-                  +964
-                </span>
+              <div className="flex flex-row-reverse">
                 <input
                   name="phoneNumber"
                   type="tel"
                   required
                   value={formData.phoneNumber}
                   onChange={handleChange}
-                  className={`flex-1 px-3 py-2 border border-gray-300 rounded-r-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white ${errors.phoneNumber ? 'border-red-500' : ''}`}
+                  className={`flex-1 px-3 py-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white ${errors.phoneNumber ? 'border-red-500' : ''}`}
                   placeholder="7XXXXXXXXX"
                 />
+                <span className="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 border border-l-0 border-gray-300 rounded-r-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">
+                  +964
+                </span>
               </div>
               {errors.phoneNumber && (
-                <p className="text-sm text-red-600 dark:text-red-400 mt-1">{errors.phoneNumber}</p>
+                <p className="text-sm text-red-600 dark:text-red-400 mt-1 text-right">{errors.phoneNumber}</p>
               )}
             </div>
 
@@ -397,18 +397,18 @@ export const Register = () => {
               size="lg"
               className="mt-6"
             >
-              Create Account
+              إنشاء الحساب
             </Button>
           </form>
 
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-600 dark:text-gray-400">
-              Already have an account?{' '}
+              لديك حساب بالفعل؟{' '}
               <Link
                 to="/login"
                 className="font-medium text-blue-600 hover:text-blue-500 dark:text-blue-400"
               >
-                Sign in here
+                سجّل الدخول من هنا
               </Link>
             </p>
           </div>

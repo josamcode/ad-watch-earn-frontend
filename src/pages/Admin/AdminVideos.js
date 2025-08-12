@@ -58,7 +58,7 @@ const AdminVideos = () => {
       }
     } catch (error) {
       console.error('Fetch videos error:', error);
-      toast.error('Failed to load videos');
+      toast.error('فشل تحميل الفيديوهات');
     } finally {
       setLoading(false);
     }
@@ -112,7 +112,7 @@ const AdminVideos = () => {
       }
 
       if (response.data.success) {
-        toast.success(`Video ${isEdit ? 'updated' : 'added'} successfully`);
+        toast.success(`تم ${isEdit ? 'تحديث' : 'إضافة'} الفيديو بنجاح`);
         setShowAddModal(false);
         setShowEditModal(false);
         resetForm();
@@ -120,12 +120,12 @@ const AdminVideos = () => {
       }
     } catch (error) {
       console.error('Submit video error:', error);
-      toast.error(error.response?.data?.message || `Failed to ${isEdit ? 'update' : 'add'} video`);
+      toast.error(error.response?.data?.message || `فشل في ${isEdit ? 'تحديث' : 'إضافة'} الفيديو`);
     }
   };
 
   const handleDeleteVideo = async (videoId) => {
-    if (!window.confirm('Are you sure you want to delete this video?')) {
+    if (!window.confirm('هل أنت متأكد أنك تريد حذف هذا الفيديو؟')) {
       return;
     }
 
@@ -133,12 +133,12 @@ const AdminVideos = () => {
       const response = await axios.delete(`/admin/videos/${videoId}`);
 
       if (response.data.success) {
-        toast.success('Video deleted successfully');
+        toast.success('تم حذف الفيديو بنجاح');
         fetchVideos();
       }
     } catch (error) {
       console.error('Delete video error:', error);
-      toast.error('Failed to delete video');
+      toast.error('فشل في حذف الفيديو');
     }
   };
 
@@ -149,7 +149,7 @@ const AdminVideos = () => {
   };
 
   const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
+    return new Date(dateString).toLocaleDateString('ar', {
       year: 'numeric',
       month: 'short',
       day: 'numeric'
@@ -165,7 +165,7 @@ const AdminVideos = () => {
 
     return (
       <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${colors[taskNumber] || colors[1]}`}>
-        Task {taskNumber}
+        المهمة {taskNumber}
       </span>
     );
   };
@@ -176,26 +176,26 @@ const AdminVideos = () => {
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-            Video Management
+            إدارة الفيديوهات
           </h1>
           <p className="text-gray-600 dark:text-gray-400">
-            Manage videos, earnings, and task assignments
+            قم بإدارة الفيديوهات، الأرباح، وتعيين المهام
           </p>
         </div>
 
-        <div className="flex items-center space-x-3">
+        <div className="flex items-center space-x-reverse space-x-3">
           <Button
             variant="outline"
             onClick={fetchVideos}
             disabled={loading}
           >
-            <RefreshCw className={`w-4 h-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
-            Refresh
+            <RefreshCw className={`w-4 h-4 ml-2 ${loading ? 'animate-spin' : ''}`} />
+            تحديث
           </Button>
 
           <Button onClick={handleAddVideo}>
-            <Plus className="w-4 h-4 mr-2" />
-            Add Video
+            <Plus className="w-4 h-4 ml-2" />
+            إضافة فيديو
           </Button>
         </div>
       </div>
@@ -203,25 +203,25 @@ const AdminVideos = () => {
       {/* Filters */}
       <Card className="p-6 mb-6">
         <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-reverse space-x-4">
             <Filter className="w-5 h-5 text-gray-600 dark:text-gray-300" />
             <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-              Filter by task:
+              التصفية حسب المهمة:
             </span>
             <select
               value={taskFilter}
               onChange={(e) => setTaskFilter(e.target.value)}
               className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
             >
-              <option value="all">All Tasks</option>
-              <option value="1">Task 1</option>
-              <option value="2">Task 2</option>
-              <option value="3">Task 3</option>
+              <option value="all">جميع المهام</option>
+              <option value="1">المهمة 1</option>
+              <option value="2">المهمة 2</option>
+              <option value="3">المهمة 3</option>
             </select>
           </div>
 
           <div className="text-sm text-gray-600 dark:text-gray-400">
-            {pagination.total || 0} total videos
+            {pagination.total || 0} فيديو إجمالي
           </div>
         </div>
       </Card>
@@ -229,7 +229,7 @@ const AdminVideos = () => {
       {/* Videos Grid */}
       {loading ? (
         <div className="p-8">
-          <LoadingSpinner text="Loading videos..." />
+          <LoadingSpinner text="جاري تحميل الفيديوهات..." />
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -249,17 +249,17 @@ const AdminVideos = () => {
                   </div>
                 )}
 
-                <div className="absolute top-2 left-2">
+                <div className="absolute top-2 right-2">
                   {getTaskBadge(video.taskNumber)}
                 </div>
 
-                <div className="absolute bottom-2 right-2 bg-black bg-opacity-75 text-white px-2 py-1 rounded text-xs">
+                <div className="absolute bottom-2 left-2 bg-black bg-opacity-75 text-white px-2 py-1 rounded text-xs">
                   {formatDuration(video.duration)}
                 </div>
               </div>
 
               {/* Video Info */}
-              <div className="p-4">
+              <div className="p-4 text-right">
                 <h3 className="font-semibold text-gray-900 dark:text-white mb-2 line-clamp-2">
                   {video.title}
                 </h3>
@@ -270,24 +270,24 @@ const AdminVideos = () => {
                   </p>
                 )}
 
-                <div className="flex items-center justify-between mb-3">
-                  <div className="flex items-center space-x-1 text-sm text-gray-600 dark:text-gray-400">
+                <div className="flex items-center justify-between mb-3 space-x-reverse space-x-1">
+                  <div className="flex items-center space-x-reverse space-x-1 text-sm text-gray-600 dark:text-gray-400">
                     <Eye className="w-4 h-4" />
-                    <span>{video.totalViews} views</span>
+                    <span>{video.totalViews} مشاهدة</span>
                   </div>
 
-                  <div className="flex items-center space-x-1 text-sm text-green-600 dark:text-green-400">
+                  <div className="flex items-center space-x-reverse space-x-1 text-sm text-green-600 dark:text-green-400">
                     <DollarSign className="w-4 h-4" />
-                    <span>{video.earningsPerView} IQD</span>
+                    <span>{video.earningsPerView} د.ع</span>
                   </div>
                 </div>
 
                 <div className="text-xs text-gray-500 dark:text-gray-500 mb-4">
-                  Added: {formatDate(video.createdAt)}
+                  أُضيف في: {formatDate(video.createdAt)}
                 </div>
 
                 {/* Actions */}
-                <div className="flex space-x-2">
+                <div className="flex space-x-reverse space-x-2">
                   <Button
                     variant="outline"
                     size="sm"
@@ -295,7 +295,7 @@ const AdminVideos = () => {
                     className="flex-1"
                   >
                     <Edit className="w-3 h-3 mr-1" />
-                    Edit
+                    تعديل
                   </Button>
 
                   <Button
@@ -315,14 +315,14 @@ const AdminVideos = () => {
               <Card className="p-12 text-center">
                 <Video className="w-16 h-16 text-gray-400 mx-auto mb-4" />
                 <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
-                  No Videos Found
+                  لا توجد فيديوهات
                 </h3>
                 <p className="text-gray-600 dark:text-gray-400 mb-6">
-                  Start by adding your first video to the platform.
+                  ابدأ بإضافة أول فيديو لك على النظام.
                 </p>
                 <Button onClick={handleAddVideo}>
-                  <Plus className="w-4 h-4 mr-2" />
-                  Add Your First Video
+                  <Plus className="w-4 h-4 ml-2" />
+                  إضافة أول فيديو
                 </Button>
               </Card>
             </div>
@@ -332,17 +332,17 @@ const AdminVideos = () => {
 
       {/* Pagination */}
       {pagination.pages > 1 && (
-        <div className="flex items-center justify-center space-x-2 mt-8">
+        <div className="flex items-center justify-center space-x-reverse space-x-2 mt-8">
           <Button
             variant="outline"
             size="sm"
             onClick={() => setCurrentPage(currentPage - 1)}
             disabled={currentPage === 1}
           >
-            Previous
+            السابق
           </Button>
 
-          <div className="flex space-x-1">
+          <div className="flex space-x-reverse space-x-1">
             {[...Array(pagination.pages)].map((_, index) => {
               const page = index + 1;
               return (
@@ -350,8 +350,8 @@ const AdminVideos = () => {
                   key={page}
                   onClick={() => setCurrentPage(page)}
                   className={`px-3 py-1 rounded-md text-sm font-medium ${page === currentPage
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
                     }`}
                 >
                   {page}
@@ -366,7 +366,7 @@ const AdminVideos = () => {
             onClick={() => setCurrentPage(currentPage + 1)}
             disabled={currentPage === pagination.pages}
           >
-            Next
+            التالي
           </Button>
         </div>
       )}
@@ -375,7 +375,7 @@ const AdminVideos = () => {
       <Modal
         isOpen={showAddModal}
         onClose={() => setShowAddModal(false)}
-        title="Add New Video"
+        title="إضافة فيديو جديد"
         size="xl"
       >
         <VideoForm
@@ -383,7 +383,7 @@ const AdminVideos = () => {
           setFormData={setFormData}
           onSubmit={() => handleSubmit(false)}
           onCancel={() => setShowAddModal(false)}
-          submitText="Add Video"
+          submitText="إضافة فيديو"
         />
       </Modal>
 
@@ -391,7 +391,7 @@ const AdminVideos = () => {
       <Modal
         isOpen={showEditModal}
         onClose={() => setShowEditModal(false)}
-        title="Edit Video"
+        title="تعديل الفيديو"
         size="xl"
       >
         <VideoForm
@@ -399,7 +399,7 @@ const AdminVideos = () => {
           setFormData={setFormData}
           onSubmit={() => handleSubmit(true)}
           onCancel={() => setShowEditModal(false)}
-          submitText="Update Video"
+          submitText="تحديث الفيديو"
         />
       </Modal>
     </div>
@@ -414,20 +414,20 @@ const VideoForm = ({ formData, setFormData, onSubmit, onCancel, submitText }) =>
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 text-right">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Input
-          label="Video Title"
+          label="عنوان الفيديو"
           name="title"
           value={formData.title}
           onChange={handleChange}
           required
-          placeholder="Enter video title"
+          placeholder="أدخل عنوان الفيديو"
         />
 
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Task Number <span className="text-red-500">*</span>
+            رقم المهمة <span className="text-red-500">*</span>
           </label>
           <select
             name="taskNumber"
@@ -435,15 +435,15 @@ const VideoForm = ({ formData, setFormData, onSubmit, onCancel, submitText }) =>
             onChange={handleChange}
             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
           >
-            <option value={1}>Task 1</option>
-            <option value={2}>Task 2</option>
-            <option value={3}>Task 3</option>
+            <option value={1}>المهمة 1</option>
+            <option value={2}>المهمة 2</option>
+            <option value={3}>المهمة 3</option>
           </select>
         </div>
       </div>
 
       <Input
-        label="Video URL"
+        label="رابط الفيديو"
         name="url"
         type="url"
         value={formData.url}
@@ -453,16 +453,16 @@ const VideoForm = ({ formData, setFormData, onSubmit, onCancel, submitText }) =>
       />
 
       <Input
-        label="Description"
+        label="الوصف"
         name="description"
         value={formData.description}
         onChange={handleChange}
-        placeholder="Brief description of the video"
+        placeholder="وصف مختصر للفيديو"
       />
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Input
-          label="Duration (seconds)"
+          label="المدة (بالثواني)"
           name="duration"
           type="number"
           value={formData.duration}
@@ -473,7 +473,7 @@ const VideoForm = ({ formData, setFormData, onSubmit, onCancel, submitText }) =>
         />
 
         <Input
-          label="Earnings per View (IQD)"
+          label="الأرباح لكل مشاهدة (د.ع)"
           name="earningsPerView"
           type="number"
           value={formData.earningsPerView}
@@ -486,7 +486,7 @@ const VideoForm = ({ formData, setFormData, onSubmit, onCancel, submitText }) =>
       </div>
 
       <Input
-        label="Thumbnail URL (Optional)"
+        label="رابط الصورة المصغرة (اختياري)"
         name="thumbnailUrl"
         type="url"
         value={formData.thumbnailUrl}
@@ -494,13 +494,13 @@ const VideoForm = ({ formData, setFormData, onSubmit, onCancel, submitText }) =>
         placeholder="https://example.com/thumbnail.jpg"
       />
 
-      <div className="flex space-x-3 mt-6">
+      <div className="flex space-x-reverse space-x-3 mt-6">
         <Button
           variant="outline"
           onClick={onCancel}
           fullWidth
         >
-          Cancel
+          إلغاء
         </Button>
         <Button
           onClick={onSubmit}

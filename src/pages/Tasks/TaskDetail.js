@@ -77,12 +77,12 @@ const TaskDetail = () => {
         );
         setCurrentVideoIndex(unwatchedIndex >= 0 ? unwatchedIndex : 0);
       } else {
-        toast.error('Task not found or locked');
+        toast.error('المهمة غير موجودة أو مقفلة');
         navigate('/tasks');
       }
     } catch (error) {
       console.error('Fetch task error:', error);
-      toast.error('Failed to load task');
+      toast.error('فشل في تحميل المهمة');
       navigate('/tasks');
     } finally {
       setLoading(false);
@@ -135,7 +135,7 @@ const TaskDetail = () => {
 
   const handleSeek = () => {
     // Prevent seeking by restarting video
-    toast.error('Seeking is not allowed. Video restarted.');
+    toast.error('التنقل غير مسموح به. تم إعادة تشغيل الفيديو.');
     setPlayed(0);
     setTimeLeft(duration ? Math.ceil(duration) : 0);
     setCanEarn(false);
@@ -184,7 +184,7 @@ const TaskDetail = () => {
           videosWatched: [...(task.videosWatched || []), currentVideo._id]
         });
 
-        toast.success(`Earned ${earnings} IQD! 🎉`);
+        toast.success(`تم كسب ${earnings} دينار عراقي! 🎉`);
 
         // Move to next video or complete task
         setTimeout(() => {
@@ -192,9 +192,9 @@ const TaskDetail = () => {
             setCurrentVideoIndex(currentVideoIndex + 1);
           } else {
             // Task completed
-            toast.success('Task completed! 🎊');
+            toast.success('تمت المهمة! 🎊');
             if (response.data.nextTaskUnlocked) {
-              toast.success('Next task unlocked!');
+              toast.success('تم فتح المهمة التالية!');
             }
             navigate('/withdrawal');
           }
@@ -202,7 +202,7 @@ const TaskDetail = () => {
       }
     } catch (error) {
       console.error('Submit video error:', error);
-      toast.error(error.response?.data?.message || 'Failed to submit video completion');
+      toast.error(error.response?.data?.message || 'فشل في تقديم إكمال الفيديو');
     } finally {
       setSubmitting(false);
     }
@@ -219,17 +219,17 @@ const TaskDetail = () => {
   };
 
   if (loading) {
-    return <LoadingSpinner text="Loading task..." />;
+    return <LoadingSpinner text="جاري تحميل المهمة..." />;
   }
 
   if (!task) {
     return (
-      <div className="max-w-4xl mx-auto px-4 py-8 text-center">
+      <div className="max-w-7xl mx-auto px-4 py-8 text-center">
         <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-          Task Not Found
+          المهمة غير موجودة
         </h1>
         <Button onClick={() => navigate('/tasks')}>
-          Back to Tasks
+          العودة إلى المهام
         </Button>
       </div>
     );
@@ -239,7 +239,7 @@ const TaskDetail = () => {
   const isCurrentVideoWatched = isVideoWatched(currentVideo?._id);
 
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center space-x-4">
@@ -251,17 +251,17 @@ const TaskDetail = () => {
           </button>
           <div>
             <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-              Task {task.taskNumber}: {task.title}
+              المهمة {task.taskNumber}: {task.title}
             </h1>
             <p className="text-gray-600 dark:text-gray-400">
-              Video {currentVideoIndex + 1} of {task.videos.length}
+              الفيديو {currentVideoIndex + 1} من أصل {task.videos.length}
             </p>
           </div>
         </div>
 
         <div className="flex items-center space-x-2">
           <Badge variant="info">
-            {task.videos.filter(v => isVideoWatched(v._id)).length}/{task.videos.length} Complete
+            {task.videos.filter(v => isVideoWatched(v._id)).length}/{task.videos.length} مكتملة
           </Badge>
         </div>
       </div>
@@ -327,7 +327,7 @@ const TaskDetail = () => {
                           <div className="flex items-center space-x-2">
                             <Clock className="w-4 h-4" />
                             <span className="text-sm font-medium">
-                              {formatTime(timeLeft)} remaining
+                              {formatTime(timeLeft)} متبقية
                             </span>
                           </div>
                         )}
@@ -354,7 +354,7 @@ const TaskDetail = () => {
                     <div className="flex items-center justify-center p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
                       <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-400 mr-2" />
                       <span className="text-green-700 dark:text-green-300 font-medium">
-                        Already watched - Earnings received!
+                        تم المشاهدة مسبقاً - تم استلام الأرباح!
                       </span>
                     </div>
                   ) : (
@@ -364,8 +364,8 @@ const TaskDetail = () => {
                           <AlertCircle className="w-5 h-5 text-blue-600 dark:text-blue-400 mr-2" />
                           <span className="text-blue-700 dark:text-blue-300">
                             {timeLeft > 0
-                              ? `Watch for ${formatTime(timeLeft)} more to earn money`
-                              : 'Play the video completely to earn money'
+                              ? `شاهد لمدة ${formatTime(timeLeft)} إضافية لكسب المال`
+                              : 'شاهد الفيديو بالكامل لكسب المال'
                             }
                           </span>
                         </div>
@@ -374,7 +374,7 @@ const TaskDetail = () => {
                           <div className="flex items-center justify-center p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg mb-4">
                             <Gift className="w-5 h-5 text-green-600 dark:text-green-400 mr-2" />
                             <span className="text-green-700 dark:text-green-300 font-medium">
-                              Congratulations! You can now earn {currentVideo.earningsPerView} IQD
+                              مبروك! يمكنك الآن كسب {currentVideo.earningsPerView} دينار عراقي
                             </span>
                           </div>
 
@@ -385,7 +385,7 @@ const TaskDetail = () => {
                             size="lg"
                             className="min-w-[200px]"
                           >
-                            {hasEarned ? 'Earned!' : `Claim ${currentVideo.earningsPerView} IQD`}
+                            {hasEarned ? 'تم الكسب!' : `استلم ${currentVideo.earningsPerView} دينار عراقي`}
                           </Button>
                         </div>
                       )}
@@ -395,7 +395,7 @@ const TaskDetail = () => {
               </>
             ) : (
               <div className="py-12">
-                <p className="text-gray-600 dark:text-gray-400">No video available</p>
+                <p className="text-gray-600 dark:text-gray-400">لا يوجد فيديو متاح</p>
               </div>
             )}
           </Card>
@@ -406,7 +406,7 @@ const TaskDetail = () => {
           {/* Task Progress */}
           <Card className="p-6">
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-              Task Progress
+              تقدم المهمة
             </h3>
 
             <div className="space-y-3">
@@ -434,10 +434,10 @@ const TaskDetail = () => {
 
                     <div>
                       <p className="text-sm font-medium text-gray-900 dark:text-white">
-                        Video {index + 1}
+                        الفيديو {index + 1}
                       </p>
                       <p className="text-xs text-gray-600 dark:text-gray-400">
-                        {video.earningsPerView} IQD
+                        {video.earningsPerView} دينار عراقي
                       </p>
                     </div>
                   </div>
@@ -464,7 +464,7 @@ const TaskDetail = () => {
                 className="flex-1"
               >
                 <ArrowLeft className="w-4 h-4 mr-1" />
-                Previous
+                السابق
               </Button>
 
               <Button
@@ -474,7 +474,7 @@ const TaskDetail = () => {
                 disabled={currentVideoIndex === task.videos.length - 1}
                 className="flex-1"
               >
-                Next
+                التالي
                 <ArrowRight className="w-4 h-4 ml-1" />
               </Button>
             </div>
@@ -485,14 +485,14 @@ const TaskDetail = () => {
             <div className="flex items-center space-x-3 mb-4">
               <DollarSign className="w-6 h-6 text-green-600 dark:text-green-400" />
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                Earnings
+                الأرباح
               </h3>
             </div>
 
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <span className="text-sm text-gray-600 dark:text-gray-400">
-                  Videos Completed
+                  الفيديوهات المكتملة
                 </span>
                 <span className="font-semibold text-gray-900 dark:text-white">
                   {task.videos.filter(v => isVideoWatched(v._id)).length}/{task.videos.length}
@@ -501,23 +501,23 @@ const TaskDetail = () => {
 
               <div className="flex items-center justify-between">
                 <span className="text-sm text-gray-600 dark:text-gray-400">
-                  Task Earnings
+                  أرباح المهمة
                 </span>
                 <span className="font-semibold text-green-600 dark:text-green-400">
                   {task.videos
                     .filter(v => isVideoWatched(v._id))
                     .reduce((sum, v) => sum + v.earningsPerView, 0)
-                    .toLocaleString()} IQD
+                    .toLocaleString()} دينار عراقي
                 </span>
               </div>
 
               <div className="border-t border-gray-200 dark:border-gray-600 pt-3">
                 <div className="flex items-center justify-between">
                   <span className="font-medium text-gray-900 dark:text-white">
-                    Current Balance
+                    الرصيد الحالي
                   </span>
                   <span className="text-lg font-bold text-green-600 dark:text-green-400">
-                    {user?.balance?.toLocaleString() || 0} IQD
+                    {user?.balance?.toLocaleString() || 0} دينار عراقي
                   </span>
                 </div>
               </div>
@@ -530,13 +530,13 @@ const TaskDetail = () => {
               <AlertCircle className="w-5 h-5 text-yellow-600 dark:text-yellow-400 mt-0.5 flex-shrink-0" />
               <div>
                 <h4 className="font-medium text-yellow-800 dark:text-yellow-200 mb-2">
-                  Important Rules
+                  قواعد مهمة
                 </h4>
                 <ul className="text-sm text-yellow-700 dark:text-yellow-300 space-y-1">
-                  <li>• Watch videos completely from start to finish</li>
-                  <li>• No skipping, fast-forwarding, or seeking allowed</li>
-                  <li>• Each video can only be watched once for earnings</li>
-                  <li>• Complete all videos to unlock next task</li>
+                  <li>• شاهد الفيديوهات بالكامل من البداية إلى النهاية</li>
+                  <li>• ممنوع التخطي أو التمرير السريع أو التنقل</li>
+                  <li>• يمكن مشاهدة كل فيديو مرة واحدة فقط للحصول على الأرباح</li>
+                  <li>• أكمل جميع الفيديوهات لفتح المهمة التالية</li>
                 </ul>
               </div>
             </div>

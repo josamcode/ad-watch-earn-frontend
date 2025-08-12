@@ -7,12 +7,11 @@ const AuthContext = createContext();
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error('يجب استخدام useAuth داخل AuthProvider');
   }
   return context;
 };
 
-// Configure axios defaults
 axios.defaults.baseURL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
 export const AuthProvider = ({ children }) => {
@@ -20,7 +19,6 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [token, setToken] = useState(localStorage.getItem('token'));
 
-  // Configure axios interceptor for auth token
   useEffect(() => {
     if (token) {
       axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
@@ -29,11 +27,10 @@ export const AuthProvider = ({ children }) => {
     }
   }, [token]);
 
-  // Check if user is authenticated on app load
   useEffect(() => {
     const checkAuth = async () => {
       const savedToken = localStorage.getItem('token');
-      
+
       if (savedToken) {
         try {
           const response = await axios.get('/auth/verify');
@@ -45,19 +42,18 @@ export const AuthProvider = ({ children }) => {
             setToken(null);
           }
         } catch (error) {
-          console.error('Auth check failed:', error);
+          console.error('فشل التحقق من تسجيل الدخول:', error);
           localStorage.removeItem('token');
           setToken(null);
         }
       }
-      
+
       setLoading(false);
     };
 
     checkAuth();
   }, []);
 
-  // Login function
   const login = async (username, password) => {
     try {
       const response = await axios.post('/auth/login', {
@@ -67,59 +63,56 @@ export const AuthProvider = ({ children }) => {
 
       if (response.data.success) {
         const { token: newToken, user: userData } = response.data;
-        
+
         localStorage.setItem('token', newToken);
         setToken(newToken);
         setUser(userData);
-        
-        toast.success('Login successful!');
+
+        toast.success('تم تسجيل الدخول بنجاح!');
         return { success: true };
       } else {
-        toast.error(response.data.message || 'Login failed');
+        toast.error(response.data.message || 'فشل تسجيل الدخول');
         return { success: false, message: response.data.message };
       }
     } catch (error) {
-      const message = error.response?.data?.message || 'Login failed. Please try again.';
+      const message = error.response?.data?.message || 'فشل تسجيل الدخول. يرجى المحاولة مرة أخرى.';
       toast.error(message);
       return { success: false, message };
     }
   };
 
-  // Register function
   const register = async (userData) => {
     try {
       const response = await axios.post('/auth/register', userData);
 
       if (response.data.success) {
         const { token: newToken, user: newUser } = response.data;
-        
+
         localStorage.setItem('token', newToken);
         setToken(newToken);
         setUser(newUser);
-        
-        toast.success('Registration successful!');
+
+        toast.success('تم إنشاء الحساب بنجاح!');
         return { success: true };
       } else {
-        toast.error(response.data.message || 'Registration failed');
+        toast.error(response.data.message || 'فشل إنشاء الحساب');
         return { success: false, message: response.data.message };
       }
     } catch (error) {
-      const message = error.response?.data?.message || 'Registration failed. Please try again.';
+      const message = error.response?.data?.message || 'فشل إنشاء الحساب. يرجى المحاولة مرة أخرى.';
       toast.error(message);
       return { success: false, message };
     }
   };
 
-  // Logout function
   const logout = () => {
     localStorage.removeItem('token');
     setToken(null);
     setUser(null);
     delete axios.defaults.headers.common['Authorization'];
-    toast.success('Logged out successfully');
+    toast.success('تم تسجيل الخروج بنجاح');
   };
 
-  // Update user data
   const updateUser = (userData) => {
     setUser(prevUser => ({
       ...prevUser,
@@ -127,7 +120,6 @@ export const AuthProvider = ({ children }) => {
     }));
   };
 
-  // Refresh user data
   const refreshUser = async () => {
     try {
       const response = await axios.get('/auth/verify');
@@ -136,8 +128,7 @@ export const AuthProvider = ({ children }) => {
         return response.data.user;
       }
     } catch (error) {
-      console.error('Failed to refresh user data:', error);
-      // If token is invalid, logout user
+      console.error('فشل تحديث بيانات المستخدم:', error);
       if (error.response?.status === 401) {
         logout();
       }
@@ -145,7 +136,6 @@ export const AuthProvider = ({ children }) => {
     return null;
   };
 
-  // Add money to user balance (for video watching)
   const addEarnings = (amount) => {
     setUser(prevUser => ({
       ...prevUser,
@@ -154,7 +144,6 @@ export const AuthProvider = ({ children }) => {
     }));
   };
 
-  // Deduct money from user balance (for withdrawals)
   const deductBalance = (amount) => {
     setUser(prevUser => ({
       ...prevUser,
@@ -162,7 +151,6 @@ export const AuthProvider = ({ children }) => {
     }));
   };
 
-  // Update task progress
   const updateTaskProgress = (taskNumber, progress) => {
     setUser(prevUser => ({
       ...prevUser,

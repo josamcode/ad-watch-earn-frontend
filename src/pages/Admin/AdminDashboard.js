@@ -35,14 +35,14 @@ const AdminDashboard = () => {
       }
     } catch (error) {
       console.error('Fetch dashboard stats error:', error);
-      toast.error('Failed to load dashboard statistics');
+      toast.error('فشل تحميل إحصائيات لوحة التحكم');
     } finally {
       setLoading(false);
     }
   };
 
   const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
+    return new Date(dateString).toLocaleDateString('ar', {
       month: 'short',
       day: 'numeric',
       hour: '2-digit',
@@ -51,7 +51,7 @@ const AdminDashboard = () => {
   };
 
   if (loading) {
-    return <LoadingSpinner text="Loading admin dashboard..." />;
+    return <LoadingSpinner text="جاري تحميل لوحة تحكم المشرف..." />;
   }
 
   return (
@@ -59,10 +59,10 @@ const AdminDashboard = () => {
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-          Admin Dashboard
+          لوحة تحكم المشرف
         </h1>
         <p className="text-gray-600 dark:text-gray-400">
-          Monitor platform activity and manage user operations
+          راقب نشاط النظام وقم بإدارة عمليات المستخدمين
         </p>
       </div>
 
@@ -71,9 +71,9 @@ const AdminDashboard = () => {
         <Card className="p-6 bg-gradient-to-r from-blue-500 to-blue-600 text-white">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-blue-100 text-sm font-medium">Total Users</p>
+              <p className="text-blue-100 text-sm font-medium">إجمالي المستخدمين</p>
               <p className="text-3xl font-bold">{stats?.totalUsers || 0}</p>
-              <p className="text-blue-100 text-xs mt-1">Active accounts</p>
+              <p className="text-blue-100 text-xs mt-1">الحسابات النشطة</p>
             </div>
             <div className="p-3 bg-blue-400 rounded-full">
               <Users className="w-8 h-8" />
@@ -84,9 +84,9 @@ const AdminDashboard = () => {
         <Card className="p-6 bg-gradient-to-r from-purple-500 to-purple-600 text-white">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-purple-100 text-sm font-medium">Total Videos</p>
+              <p className="text-purple-100 text-sm font-medium">إجمالي الفيديوهات</p>
               <p className="text-3xl font-bold">{stats?.totalVideos || 0}</p>
-              <p className="text-purple-100 text-xs mt-1">Active content</p>
+              <p className="text-purple-100 text-xs mt-1">المحتوى النشط</p>
             </div>
             <div className="p-3 bg-purple-400 rounded-full">
               <Video className="w-8 h-8" />
@@ -97,9 +97,9 @@ const AdminDashboard = () => {
         <Card className="p-6 bg-gradient-to-r from-green-500 to-green-600 text-white">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-green-100 text-sm font-medium">Total Earnings</p>
+              <p className="text-green-100 text-sm font-medium">إجمالي الأرباح</p>
               <p className="text-3xl font-bold">{(stats?.totalEarnings || 0).toLocaleString()}</p>
-              <p className="text-green-100 text-xs mt-1">IQD distributed</p>
+              <p className="text-green-100 text-xs mt-1">دينار عراقي موزع</p>
             </div>
             <div className="p-3 bg-green-400 rounded-full">
               <DollarSign className="w-8 h-8" />
@@ -110,9 +110,9 @@ const AdminDashboard = () => {
         <Card className="p-6 bg-gradient-to-r from-orange-500 to-orange-600 text-white">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-orange-100 text-sm font-medium">Pending Withdrawals</p>
+              <p className="text-orange-100 text-sm font-medium">طلبات السحب المعلقة</p>
               <p className="text-3xl font-bold">{stats?.pendingWithdrawals || 0}</p>
-              <p className="text-orange-100 text-xs mt-1">Awaiting review</p>
+              <p className="text-orange-100 text-xs mt-1">بانتظار المراجعة</p>
             </div>
             <div className="p-3 bg-orange-400 rounded-full">
               <Clock className="w-8 h-8" />
@@ -126,30 +126,30 @@ const AdminDashboard = () => {
         <Card className="p-6">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-              Platform Activity
+              نشاط النظام
             </h3>
             <TrendingUp className="w-5 h-5 text-blue-600 dark:text-blue-400" />
           </div>
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <span className="text-sm text-gray-600 dark:text-gray-400">Total Video Views</span>
+              <span className="text-sm text-gray-600 dark:text-gray-400">إجمالي مشاهدات الفيديوهات</span>
               <span className="font-semibold text-gray-900 dark:text-white">
                 {stats?.totalViews?.toLocaleString() || 0}
               </span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-sm text-gray-600 dark:text-gray-400">Total Withdrawals</span>
+              <span className="text-sm text-gray-600 dark:text-gray-400">إجمالي عمليات السحب</span>
               <span className="font-semibold text-gray-900 dark:text-white">
                 {stats?.totalWithdrawals || 0}
               </span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-sm text-gray-600 dark:text-gray-400">Average Earnings/User</span>
+              <span className="text-sm text-gray-600 dark:text-gray-400">متوسط الأرباح/مستخدم</span>
               <span className="font-semibold text-gray-900 dark:text-white">
                 {stats?.totalUsers > 0
                   ? Math.round((stats?.totalEarnings || 0) / stats.totalUsers).toLocaleString()
                   : 0
-                } IQD
+                } د.ع
               </span>
             </div>
           </div>
@@ -158,7 +158,7 @@ const AdminDashboard = () => {
         <Card className="p-6">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-              Recent Activity
+              النشاط الأخير
             </h3>
             <Eye className="w-5 h-5 text-green-600 dark:text-green-400" />
           </div>
@@ -166,19 +166,19 @@ const AdminDashboard = () => {
             <div className="flex items-center space-x-2">
               <div className="w-2 h-2 bg-green-500 rounded-full"></div>
               <span className="text-sm text-gray-600 dark:text-gray-400">
-                New users: +{Math.floor(Math.random() * 10) + 1} today
+                مستخدمون جدد: +{Math.floor(Math.random() * 10) + 1} اليوم
               </span>
             </div>
             <div className="flex items-center space-x-2">
               <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
               <span className="text-sm text-gray-600 dark:text-gray-400">
-                Videos watched: +{Math.floor(Math.random() * 50) + 20} today
+                فيديوهات مشاهدة: +{Math.floor(Math.random() * 50) + 20} اليوم
               </span>
             </div>
             <div className="flex items-center space-x-2">
               <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
               <span className="text-sm text-gray-600 dark:text-gray-400">
-                Tasks completed: +{Math.floor(Math.random() * 15) + 5} today
+                مهام مكتملة: +{Math.floor(Math.random() * 15) + 5} اليوم
               </span>
             </div>
           </div>
@@ -187,22 +187,22 @@ const AdminDashboard = () => {
         <Card className="p-6">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-              System Status
+              حالة النظام
             </h3>
             <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-400" />
           </div>
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <span className="text-sm text-gray-600 dark:text-gray-400">Server Status</span>
-              <Badge variant="success">Online</Badge>
+              <span className="text-sm text-gray-600 dark:text-gray-400">حالة الخادم</span>
+              <Badge variant="success">متصل</Badge>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-sm text-gray-600 dark:text-gray-400">Database</span>
-              <Badge variant="success">Connected</Badge>
+              <span className="text-sm text-gray-600 dark:text-gray-400">قاعدة البيانات</span>
+              <Badge variant="success">متصل</Badge>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-sm text-gray-600 dark:text-gray-400">Payment System</span>
-              <Badge variant="success">Active</Badge>
+              <span className="text-sm text-gray-600 dark:text-gray-400">نظام الدفع</span>
+              <Badge variant="success">نشط</Badge>
             </div>
           </div>
         </Card>
@@ -214,13 +214,13 @@ const AdminDashboard = () => {
         <Card className="p-6">
           <div className="flex items-center justify-between mb-6">
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-              Recent Users
+              المستخدمون الجدد
             </h3>
             <Link
               to="/admin/users"
               className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 text-sm font-medium flex items-center space-x-1"
             >
-              <span>View All</span>
+              <span>عرض الكل</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
@@ -243,10 +243,10 @@ const AdminDashboard = () => {
                 </div>
                 <div className="text-right">
                   <p className="text-sm text-gray-600 dark:text-gray-400">
-                    Joined {formatDate(user.createdAt)}
+                    انضم في {formatDate(user.createdAt)}
                   </p>
                   <p className="text-xs text-gray-500 dark:text-gray-500">
-                    Last login: {user.lastLogin ? formatDate(user.lastLogin) : 'Never'}
+                    آخر تسجيل دخول: {user.lastLogin ? formatDate(user.lastLogin) : 'أبدًا'}
                   </p>
                 </div>
               </div>
@@ -255,7 +255,7 @@ const AdminDashboard = () => {
             {(!stats?.recentUsers || stats.recentUsers.length === 0) && (
               <div className="py-8">
                 <Users className="w-12 h-12 text-gray-400 mx-auto mb-3" />
-                <p className="text-gray-600 dark:text-gray-400">No recent users</p>
+                <p className="text-gray-600 dark:text-gray-400">لا يوجد مستخدمون حديثون</p>
               </div>
             )}
           </div>
@@ -265,13 +265,13 @@ const AdminDashboard = () => {
         <Card className="p-6">
           <div className="flex items-center justify-between mb-6">
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-              Top Performing Videos
+              أفضل الفيديوهات أداءً
             </h3>
             <Link
               to="/admin/videos"
               className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 text-sm font-medium flex items-center space-x-1"
             >
-              <span>View All</span>
+              <span>عرض الكل</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
@@ -290,13 +290,13 @@ const AdminDashboard = () => {
                       {video.title}
                     </p>
                     <p className="text-sm text-gray-600 dark:text-gray-400">
-                      {video.totalViews} views • {video.totalEarnings?.toLocaleString()} IQD earned
+                      {video.totalViews} مشاهدة • {video.totalEarnings?.toLocaleString()} د.ع مكتسبة
                     </p>
                   </div>
                 </div>
                 <div className="text-right">
                   <Badge variant="info">
-                    {video.totalViews} views
+                    {video.totalViews} مشاهدة
                   </Badge>
                 </div>
               </div>
@@ -305,7 +305,7 @@ const AdminDashboard = () => {
             {(!stats?.topVideos || stats.topVideos.length === 0) && (
               <div className="py-8">
                 <Video className="w-12 h-12 text-gray-400 mx-auto mb-3" />
-                <p className="text-gray-600 dark:text-gray-400">No videos uploaded yet</p>
+                <p className="text-gray-600 dark:text-gray-400">لم يتم رفع فيديوهات بعد</p>
               </div>
             )}
           </div>
@@ -315,7 +315,7 @@ const AdminDashboard = () => {
       {/* Quick Actions */}
       <Card className="p-6 mt-8">
         <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-6">
-          Quick Actions
+          إجراءات سريعة
         </h3>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -325,8 +325,8 @@ const AdminDashboard = () => {
           >
             <Users className="w-6 h-6 text-blue-600 dark:text-blue-400" />
             <div>
-              <p className="font-medium text-blue-700 dark:text-blue-300">Manage Users</p>
-              <p className="text-sm text-blue-600 dark:text-blue-400">View and edit user accounts</p>
+              <p className="font-medium text-blue-700 dark:text-blue-300">إدارة المستخدمين</p>
+              <p className="text-sm text-blue-600 dark:text-blue-400">عرض وتعديل الحسابات</p>
             </div>
           </Link>
 
@@ -336,8 +336,8 @@ const AdminDashboard = () => {
           >
             <Video className="w-6 h-6 text-purple-600 dark:text-purple-400" />
             <div>
-              <p className="font-medium text-purple-700 dark:text-purple-300">Manage Videos</p>
-              <p className="text-sm text-purple-600 dark:text-purple-400">Add and edit video content</p>
+              <p className="font-medium text-purple-700 dark:text-purple-300">إدارة الفيديوهات</p>
+              <p className="text-sm text-purple-600 dark:text-purple-400">إضافة وتعديل المحتوى</p>
             </div>
           </Link>
 
@@ -347,8 +347,8 @@ const AdminDashboard = () => {
           >
             <DollarSign className="w-6 h-6 text-green-600 dark:text-green-400" />
             <div>
-              <p className="font-medium text-green-700 dark:text-green-300">Process Withdrawals</p>
-              <p className="text-sm text-green-600 dark:text-green-400">Review payment requests</p>
+              <p className="font-medium text-green-700 dark:text-green-300">معالجة السحوبات</p>
+              <p className="text-sm text-green-600 dark:text-green-400">مراجعة طلبات الدفع</p>
             </div>
           </Link>
 
@@ -358,8 +358,8 @@ const AdminDashboard = () => {
           >
             <AlertCircle className="w-6 h-6 text-orange-600 dark:text-orange-400" />
             <div>
-              <p className="font-medium text-orange-700 dark:text-orange-300">Platform Settings</p>
-              <p className="text-sm text-orange-600 dark:text-orange-400">Configure system settings</p>
+              <p className="font-medium text-orange-700 dark:text-orange-300">إعدادات النظام</p>
+              <p className="text-sm text-orange-600 dark:text-orange-400">ضبط إعدادات النظام</p>
             </div>
           </Link>
         </div>
