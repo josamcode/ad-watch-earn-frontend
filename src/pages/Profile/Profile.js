@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { Card, Button, Input } from '../../components/UI/LoadingSpinner';
 import {
@@ -14,13 +14,14 @@ import {
   Edit3,
   Save,
   X,
-  RefreshCw
+  RefreshCw,
+  LogOut
 } from 'lucide-react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 
 const Profile = () => {
-  const { user, updateUser } = useAuth();
+  const { user, updateUser, logout } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
     name: user?.name || '',
@@ -28,6 +29,11 @@ const Profile = () => {
     phoneNumber: user?.phoneNumber || ''
   });
   const [loading, setLoading] = useState(false);
+
+  const handleLogout = () => {
+    logout();
+    Navigate('/login');
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -66,7 +72,7 @@ const Profile = () => {
   };
 
   const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
+    return new Date(dateString).toLocaleDateString('ar', {
       year: 'numeric',
       month: 'long',
       day: 'numeric'
@@ -81,11 +87,22 @@ const Profile = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="text-center mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
-          الملف الشخصي
-        </h1>
-        <p className="text-gray-600 dark:text-gray-400">
+      <div className="mb-8">
+        <div className="flex items-center justify-between">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
+            الملف الشخصي
+          </h1>
+          <button
+            onClick={handleLogout}
+            className="flex items-center space-x-2 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+            dir='ltr'
+          >
+            <LogOut className="w-4 h-4" />
+            <span>تسجيل الخروج</span>
+          </button>
+        </div>
+
+        <p className="text-gray-600 dark:text-gray-400 mt-2">
           إدارة معلومات حسابك وعرض الإحصائيات الخاصة بك
         </p>
       </div>
@@ -107,7 +124,7 @@ const Profile = () => {
                   تعديل الملف الشخصي
                 </Button>
               ) : (
-                <div className="flex space-x-2">
+                <div className="flex space-x-2 gap-3">
                   <Button
                     variant="outline"
                     onClick={handleCancel}
@@ -130,7 +147,7 @@ const Profile = () => {
             <div className="space-y-6">
               {/* Profile Picture Placeholder */}
               <div className="flex items-center space-x-4">
-                <div className="w-20 h-20 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+                <div className="w-20 h-20 ml-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
                   <User className="w-10 h-10 text-white" />
                 </div>
                 <div>
@@ -221,7 +238,7 @@ const Profile = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg">
                 <div className="flex items-center space-x-3">
-                  <DollarSign className="w-8 h-8 text-green-600 dark:text-green-400" />
+                  <DollarSign className="w-8 h-8 ml-3 text-green-600 dark:text-green-400" />
                   <div>
                     <p className="text-sm text-green-700 dark:text-green-300">إجمالي الأرباح</p>
                     <p className="text-2xl font-bold text-green-800 dark:text-green-200">
@@ -233,7 +250,7 @@ const Profile = () => {
 
               <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
                 <div className="flex items-center space-x-3">
-                  <DollarSign className="w-8 h-8 text-blue-600 dark:text-blue-400" />
+                  <DollarSign className="w-8 h-8 ml-3 text-blue-600 dark:text-blue-400" />
                   <div>
                     <p className="text-sm text-blue-700 dark:text-blue-300">الرصيد الحالي</p>
                     <p className="text-2xl font-bold text-blue-800 dark:text-blue-200">
@@ -245,7 +262,7 @@ const Profile = () => {
 
               <div className="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg">
                 <div className="flex items-center space-x-3">
-                  <Video className="w-8 h-8 text-purple-600 dark:text-purple-400" />
+                  <Video className="w-8 h-8 ml-3 text-purple-600 dark:text-purple-400" />
                   <div>
                     <p className="text-sm text-purple-700 dark:text-purple-300">الفيديوهات المشاهدة</p>
                     <p className="text-2xl font-bold text-purple-800 dark:text-purple-200">
@@ -257,7 +274,7 @@ const Profile = () => {
 
               <div className="bg-orange-50 dark:bg-orange-900/20 p-4 rounded-lg">
                 <div className="flex items-center space-x-3">
-                  <Settings className="w-8 h-8 text-orange-600 dark:text-orange-400" />
+                  <Settings className="w-8 h-8 ml-3 text-orange-600 dark:text-orange-400" />
                   <div>
                     <p className="text-sm text-orange-700 dark:text-orange-300">تقدم المهام</p>
                     <p className="text-2xl font-bold text-orange-800 dark:text-orange-200">
@@ -282,7 +299,7 @@ const Profile = () => {
                 to="/tasks"
                 className="w-full flex items-center space-x-3 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors"
               >
-                <Video className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                <Video className="w-5 h-5 ml-3 text-blue-600 dark:text-blue-400" />
                 <span className="text-blue-700 dark:text-blue-300 font-medium">مشاهدة الفيديوهات</span>
               </Link>
 
@@ -290,7 +307,7 @@ const Profile = () => {
                 to="/withdrawal"
                 className="w-full flex items-center space-x-3 p-3 bg-green-50 dark:bg-green-900/20 rounded-lg hover:bg-green-100 dark:hover:bg-green-900/30 transition-colors"
               >
-                <DollarSign className="w-5 h-5 text-green-600 dark:text-green-400" />
+                <DollarSign className="w-5 h-5 ml-3 text-green-600 dark:text-green-400" />
                 <span className="text-green-700 dark:text-green-300 font-medium">سحب الأموال</span>
               </Link>
 
@@ -298,7 +315,7 @@ const Profile = () => {
                 to="/withdrawal-history"
                 className="w-full flex items-center space-x-3 p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg hover:bg-purple-100 dark:hover:bg-purple-900/30 transition-colors"
               >
-                <Calendar className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+                <Calendar className="w-5 h-5 ml-3 text-purple-600 dark:text-purple-400" />
                 <span className="text-purple-700 dark:text-purple-300 font-medium">عرض السجل</span>
               </Link>
             </div>
@@ -307,7 +324,7 @@ const Profile = () => {
           {/* Account Security */}
           <Card className="p-6">
             <div className="flex items-center space-x-3 mb-4">
-              <Shield className="w-6 h-6 text-green-600 dark:text-green-400" />
+              <Shield className="w-6 h-6 ml-3 text-green-600 dark:text-green-400" />
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
                 أمان الحساب
               </h3>
@@ -456,7 +473,7 @@ export const Notifications = () => {
   };
 
   const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
+    return new Date(dateString).toLocaleDateString('ar', {
       year: 'numeric',
       month: 'short',
       day: 'numeric',
@@ -578,7 +595,7 @@ export const Notifications = () => {
               onClick={() => !notification.read && markAsRead(notification._id)}
             >
               <div className="flex items-start space-x-4">
-                <div className={`p-2 rounded-full ${notification.read
+                <div className={`p-2 rounded-full ml-3 ${notification.read
                   ? 'bg-gray-100 dark:bg-gray-700'
                   : 'bg-blue-100 dark:bg-blue-900'
                   }`}>

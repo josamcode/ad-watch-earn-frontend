@@ -113,7 +113,7 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 bg-gray-50 dark:bg-gray-900 min-h-screen">
+    <div className="max-w-7xl mx-auto px-4 py-8 min-h-screen">
       {/* Welcome Section */}
       <div className="mb-8 text-right">
         <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-3">
@@ -263,7 +263,7 @@ const Dashboard = () => {
                     </div>
                     <div className="text-right flex-1">
                       <h3 className="font-semibold text-gray-900 dark:text-white text-lg">
-                        المهمة {task.taskNumber}: {task.title}
+                        المهمة {task.taskNumber}
                       </h3>
                       <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
                         {task.videos?.length || 0} فيديو • {task.description}

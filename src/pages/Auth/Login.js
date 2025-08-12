@@ -371,17 +371,17 @@ export const Register = () => {
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 text-right">
                 رقم الهاتف <span className="text-red-500">*</span>
               </label>
-              <div className="flex flex-row-reverse">
+              <div className="flex flex-row-reverse" dir='ltr'>
                 <input
                   name="phoneNumber"
                   type="tel"
                   required
                   value={formData.phoneNumber}
                   onChange={handleChange}
-                  className={`flex-1 px-3 py-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white ${errors.phoneNumber ? 'border-red-500' : ''}`}
+                  className={`flex-1 px-3 py-2 border border-gray-300 rounded-r-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white ${errors.phoneNumber ? 'border-red-500' : ''}`}
                   placeholder="7XXXXXXXXX"
                 />
-                <span className="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 border border-l-0 border-gray-300 rounded-r-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">
+                <span className="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 border border-l-0 border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">
                   +964
                 </span>
               </div>
@@ -399,6 +399,23 @@ export const Register = () => {
             >
               إنشاء الحساب
             </Button>
+            <div className="mt-4 flex items-start">
+              <input
+                id="terms"
+                type="checkbox"
+                required
+                className="mt-1 ml-3 cursor-pointer h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+              />
+              <label htmlFor="terms" className="ml-2 text-sm text-gray-600 dark:text-gray-400">
+                بمجرد تسجيلك، فأنت توافق علي
+                <Link
+                  to="/privacy-policy"
+                  className="text-blue-600 hover:underline dark:text-blue-400 mr-2"
+                >
+                  سياسة الخصوصية وشروط الاستخدام
+                </Link>
+              </label>
+            </div>
           </form>
 
           <div className="mt-6 text-center">

@@ -335,7 +335,8 @@ const Withdrawal = () => {
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     رقم واتساب <span className="text-red-500">*</span>
                   </label>
-                  <div className="flex">
+                  <div className="flex"
+                    dir='ltr'>
                     <span className="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 border border-r-0 border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">
                       <Phone className="w-4 h-4 mr-2" />
                       +964
@@ -430,19 +431,19 @@ const Withdrawal = () => {
             <div className="space-y-2">
               <Link
                 to="/withdrawal-history"
-                className="block w-full text-left px-3 py-2 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors"
+                className="block w-full px-3 py-2 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors"
               >
                 عرض سجل السحوبات
               </Link>
               <Link
                 to="/tasks"
-                className="block w-full text-left px-3 py-2 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors"
+                className="block w-full px-3 py-2 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors"
               >
                 اكسب المزيد من المال
               </Link>
               <Link
                 to="/dashboard"
-                className="block w-full text-left px-3 py-2 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors"
+                className="block w-full px-3 py-2 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors"
               >
                 العودة إلى لوحة التحكم
               </Link>
@@ -465,6 +466,7 @@ const Withdrawal = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
+                  dir='ltr'
                 >
                   <Phone className="w-4 h-4" />
                   <span>اتصل بالدعم</span>

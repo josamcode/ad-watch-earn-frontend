@@ -120,10 +120,10 @@ const WithdrawalHistory = () => {
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Header */}
       <div className="block sm:flex items-center justify-between mb-8">
-        <div className="flex items-center space-x-4">
+        <div className="flex gap-3 flex-row-reverse justify-between md:flex-row items-center space-x-0 space-x-reverse md:space-x-4">
           <Link
             to="/withdrawal"
-            className="p-2 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+            className="p-2 md:ml-0 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
           >
             <ArrowLeft className="w-5 h-5 text-gray-600 dark:text-gray-300" />
           </Link>
@@ -137,7 +137,7 @@ const WithdrawalHistory = () => {
           </div>
         </div>
 
-        <div className="flex items-center mt-2 sm:mt-0 sm:justify-normal justify-center space-x-3">
+        <div className="flex gap-3 items-center mt-2 sm:mt-0 sm:justify-normal justify-center space-x-3">
           <Button
             variant="outline"
             onClick={fetchWithdrawals}

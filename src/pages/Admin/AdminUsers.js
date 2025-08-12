@@ -159,10 +159,10 @@ const AdminUsers = () => {
             تحديث
           </Button>
 
-          <Button variant="outline">
+          {/* <Button variant="outline">
             <Download className="w-4 h-4 mr-2" />
             تصدير
-          </Button>
+          </Button> */}
         </div>
       </div>
 

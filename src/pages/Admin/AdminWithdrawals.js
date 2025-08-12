@@ -144,7 +144,7 @@ const AdminWithdrawals = () => {
           <div className="flex items-center space-x-reverse space-x-4">
             <Filter className="w-5 h-5 text-gray-600 dark:text-gray-300" />
             <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-              التصفية حسب الحالة:
+              التصفية حسب:
             </span>
             <select
               value={statusFilter}
@@ -159,7 +159,7 @@ const AdminWithdrawals = () => {
           </div>
 
           <div className="text-sm text-gray-600 dark:text-gray-400">
-            {pagination.total || 0} طلبًا إجمالي
+            {pagination.total || 0} طلبات
           </div>
         </div>
       </Card>
@@ -254,6 +254,7 @@ const AdminWithdrawals = () => {
                           variant="outline"
                           size="sm"
                           onClick={() => handleViewDetails(withdrawal)}
+                          dir='ltr'
                         >
                           <Eye className="w-3 h-3 mr-1" />
                           عرض
@@ -265,6 +266,7 @@ const AdminWithdrawals = () => {
                               variant="success"
                               size="sm"
                               onClick={() => handleProcessWithdrawal(withdrawal, 'approve')}
+                              dir='ltr'
                             >
                               <CheckCircle className="w-3 h-3 mr-1" />
                               اعتماد
@@ -273,6 +275,7 @@ const AdminWithdrawals = () => {
                               variant="danger"
                               size="sm"
                               onClick={() => handleProcessWithdrawal(withdrawal, 'reject')}
+                              dir='ltr'
                             >
                               <XCircle className="w-3 h-3 mr-1" />
                               رفض

@@ -28,6 +28,7 @@ import { BottomNav } from './components/Layout/Navbar';
 import { Register } from './pages/Auth/Login';
 import { Notifications } from './pages/Profile/Profile';
 import { AdminSettings } from './pages/Admin/AdminWithdrawals';
+import PrivacyPolicy from './pages/PrivacyPolicy/PrivacyPolicy';
 
 // Layout wrapper for authenticated users
 const AuthenticatedLayout = ({ children }) => {
@@ -128,6 +129,15 @@ function App() {
                 element={
                   <PublicRoute>
                     <Register />
+                  </PublicRoute>
+                }
+              />
+
+              <Route
+                path="/privacy-policy"
+                element={
+                  <PublicRoute>
+                    <PrivacyPolicy />
                   </PublicRoute>
                 }
               />

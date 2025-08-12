@@ -173,7 +173,7 @@ const AdminVideos = () => {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Header */}
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex items-right flex-col gap-3 md:flex-row justify-between mb-8">
         <div>
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
             إدارة الفيديوهات
@@ -188,12 +188,13 @@ const AdminVideos = () => {
             variant="outline"
             onClick={fetchVideos}
             disabled={loading}
+            className='w-full'
           >
             <RefreshCw className={`w-4 h-4 ml-2 ${loading ? 'animate-spin' : ''}`} />
             تحديث
           </Button>
 
-          <Button onClick={handleAddVideo}>
+          <Button className='w-full sm:min-w-32' onClick={handleAddVideo}>
             <Plus className="w-4 h-4 ml-2" />
             إضافة فيديو
           </Button>
@@ -206,7 +207,7 @@ const AdminVideos = () => {
           <div className="flex items-center space-x-reverse space-x-4">
             <Filter className="w-5 h-5 text-gray-600 dark:text-gray-300" />
             <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-              التصفية حسب المهمة:
+              التصفية حسب:
             </span>
             <select
               value={taskFilter}
@@ -221,7 +222,7 @@ const AdminVideos = () => {
           </div>
 
           <div className="text-sm text-gray-600 dark:text-gray-400">
-            {pagination.total || 0} فيديو إجمالي
+            {pagination.total || 0} فيديوهات
           </div>
         </div>
       </Card>
@@ -293,6 +294,7 @@ const AdminVideos = () => {
                     size="sm"
                     onClick={() => handleEditVideo(video)}
                     className="flex-1"
+                    dir='ltr'
                   >
                     <Edit className="w-3 h-3 mr-1" />
                     تعديل

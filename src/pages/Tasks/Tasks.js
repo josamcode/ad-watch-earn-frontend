@@ -73,9 +73,9 @@ const Tasks = () => {
       case 1:
         return 'متاحة لجميع المستخدمين الجدد';
       case 2:
-        return 'أكمل المهمة 1 وقم بعملية سحب';
+        return 'أكمل المهمة 1 وقم بعملية سحب , او انتظر ليقوم المسئول بفتحها';
       case 3:
-        return 'أكمل المهمة 2 وقم بعملية سحب';
+        return 'أكمل المهمة 2 وقم بعملية سحب , او انتظر ليقوم المسئول بفتحها';
       default:
         return 'الشروط غير معروفة';
     }
@@ -159,8 +159,8 @@ const Tasks = () => {
                 {/* Task Info */}
                 <div className="flex-1">
                   <div className="flex items-center space-x-3 mb-2">
-                    <h3 className="text-xl font-bold text-gray-900 dark:text-white">
-                      المهمة {task.taskNumber}: {task.title}
+                    <h3 className="text-xl font-bold text-gray-900 dark:text-white ml-3">
+                      المهمة {task.taskNumber}
                     </h3>
                     {getTaskStatusBadge(task)}
                   </div>

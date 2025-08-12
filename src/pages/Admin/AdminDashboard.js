@@ -229,7 +229,7 @@ const AdminDashboard = () => {
             {stats?.recentUsers?.map((user) => (
               <div key={user._id} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
                 <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+                  <div className="w-10 h-10 ml-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
                     <Users className="w-5 h-5 text-white" />
                   </div>
                   <div>
@@ -280,7 +280,7 @@ const AdminDashboard = () => {
             {stats?.topVideos?.map((video, index) => (
               <div key={video._id} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
                 <div className="flex items-center space-x-3">
-                  <div className="w-8 h-8 bg-purple-100 dark:bg-purple-900 rounded-full flex items-center justify-center">
+                  <div className="w-8 h-8 ml-3 bg-purple-100 dark:bg-purple-900 rounded-full flex items-center justify-center">
                     <span className="text-sm font-bold text-purple-600 dark:text-purple-400">
                       #{index + 1}
                     </span>
@@ -323,7 +323,7 @@ const AdminDashboard = () => {
             to="/admin/users"
             className="flex items-center space-x-3 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors"
           >
-            <Users className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+            <Users className="w-6 h-6 ml-3 text-blue-600 dark:text-blue-400" />
             <div>
               <p className="font-medium text-blue-700 dark:text-blue-300">إدارة المستخدمين</p>
               <p className="text-sm text-blue-600 dark:text-blue-400">عرض وتعديل الحسابات</p>
@@ -334,7 +334,7 @@ const AdminDashboard = () => {
             to="/admin/videos"
             className="flex items-center space-x-3 p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg hover:bg-purple-100 dark:hover:bg-purple-900/30 transition-colors"
           >
-            <Video className="w-6 h-6 text-purple-600 dark:text-purple-400" />
+            <Video className="w-6 h-6 ml-3 text-purple-600 dark:text-purple-400" />
             <div>
               <p className="font-medium text-purple-700 dark:text-purple-300">إدارة الفيديوهات</p>
               <p className="text-sm text-purple-600 dark:text-purple-400">إضافة وتعديل المحتوى</p>
@@ -345,7 +345,7 @@ const AdminDashboard = () => {
             to="/admin/withdrawals"
             className="flex items-center space-x-3 p-4 bg-green-50 dark:bg-green-900/20 rounded-lg hover:bg-green-100 dark:hover:bg-green-900/30 transition-colors"
           >
-            <DollarSign className="w-6 h-6 text-green-600 dark:text-green-400" />
+            <DollarSign className="w-6 h-6 ml-3 text-green-600 dark:text-green-400" />
             <div>
               <p className="font-medium text-green-700 dark:text-green-300">معالجة السحوبات</p>
               <p className="text-sm text-green-600 dark:text-green-400">مراجعة طلبات الدفع</p>
@@ -356,7 +356,7 @@ const AdminDashboard = () => {
             to="/admin/settings"
             className="flex items-center space-x-3 p-4 bg-orange-50 dark:bg-orange-900/20 rounded-lg hover:bg-orange-100 dark:hover:bg-orange-900/30 transition-colors"
           >
-            <AlertCircle className="w-6 h-6 text-orange-600 dark:text-orange-400" />
+            <AlertCircle className="w-6 h-6 ml-3 text-orange-600 dark:text-orange-400" />
             <div>
               <p className="font-medium text-orange-700 dark:text-orange-300">إعدادات النظام</p>
               <p className="text-sm text-orange-600 dark:text-orange-400">ضبط إعدادات النظام</p>

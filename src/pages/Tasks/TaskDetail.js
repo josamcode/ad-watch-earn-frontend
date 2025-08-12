@@ -196,6 +196,7 @@ const TaskDetail = () => {
             if (response.data.nextTaskUnlocked) {
               toast.success('تم فتح المهمة التالية!');
             }
+            toast.success('قم بسحب المال لفتح المهمة التالية!');
             navigate('/withdrawal');
           }
         }, 2000);
@@ -442,20 +443,20 @@ const TaskDetail = () => {
                     </div>
                   </div>
 
-                  {index !== currentVideoIndex && !isVideoWatched(video._id) && (
+                  {/* {index !== currentVideoIndex && !isVideoWatched(video._id) && (
                     <button
                       onClick={() => setCurrentVideoIndex(index)}
                       className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300"
                     >
                       <Play className="w-4 h-4" />
                     </button>
-                  )}
+                  )} */}
                 </div>
               ))}
             </div>
 
             {/* Navigation Buttons */}
-            <div className="flex space-x-2 mt-4">
+            {/* <div className="flex space-x-2 mt-4">
               <Button
                 variant="outline"
                 size="sm"
@@ -477,7 +478,7 @@ const TaskDetail = () => {
                 التالي
                 <ArrowRight className="w-4 h-4 ml-1" />
               </Button>
-            </div>
+            </div> */}
           </Card>
 
           {/* Earnings Summary */}
