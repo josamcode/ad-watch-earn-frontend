@@ -218,7 +218,7 @@ const WithdrawalHistory = () => {
           <div className="flex items-center space-x-4">
             <Filter className="w-5 h-5 text-gray-600 dark:text-gray-300" />
             <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-              تصفية حسب الحالة:
+              تصفية حسب:
             </span>
             <select
               value={filter}
@@ -233,7 +233,7 @@ const WithdrawalHistory = () => {
           </div>
 
           <div className="text-sm text-gray-600 dark:text-gray-400">
-            {pagination.total || 0} طلبًا إجمالي
+            {pagination.total || 0} طلبات
           </div>
         </div>
       </Card>
@@ -244,7 +244,7 @@ const WithdrawalHistory = () => {
           <Card key={withdrawal._id} className="p-6 hover:shadow-lg transition-shadow">
             <div className="flex items-start justify-between">
               <div className="flex items-start space-x-4 flex-1">
-                <div className="p-2 rounded-full bg-gray-100 dark:bg-gray-700">
+                <div className="p-2 rounded-full ml-3 bg-gray-100 dark:bg-gray-700">
                   {getStatusIcon(withdrawal.status)}
                 </div>
 
@@ -301,11 +301,11 @@ const WithdrawalHistory = () => {
                   </Button>
                 )}
 
-                <div className="text-right">
+                {/* <div className="text-right">
                   <p className="text-xs text-gray-500 dark:text-gray-400">
                     المعرف: {withdrawal._id.slice(-8)}
                   </p>
-                </div>
+                </div> */}
               </div>
             </div>
           </Card>
